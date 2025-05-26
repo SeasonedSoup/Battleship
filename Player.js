@@ -7,5 +7,21 @@ export class Player {
         this.name = name;
     }
 
+    placeMultipleRandomShips() {
+        for (let i = 1; i < 5; i ++) {
+            try {
 
+            } catch (e) {
+                i--
+            }
+        }
+    }
+    
+    makeMove(square, enemyBoard)  {
+        return this.gameboard.receiveAttack(square, enemyBoard)
+    }
+
+    isComputer() {
+        return !this.player;
+    }
 }

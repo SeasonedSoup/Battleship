@@ -20,6 +20,10 @@ export class GameBoard {
         }
     }
 
+    reloadBoard() {
+        return this.board;
+    }
+
     placeShip(size, coords, direction) {
         const ship = new Ship(size);
         const [row, cols] = coords;
@@ -36,12 +40,11 @@ export class GameBoard {
         }
     }
 
-    receiveAttack(coords) {
-        //check before taking the coords
+    receiveAttack(coords, enemyBoard) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
-            return false;
+            return;
         }
-        const ship = this.board[coords[0]][coords[1]];
+        const ship = enemyBoard.board[coords[0]][coords[1]];
 
         if (ship instanceof Ship) {
             ship.hit()
@@ -53,6 +56,19 @@ export class GameBoard {
         }
     }
 
+    areAllShipsSunk() {
+        for (let i = 0; i < this.rows; i++) {
+            for(let j = 0; j < this.cols; j++) {
+                if (this.board[i][j] instanceof Ship) {
+                    if (!this.board[i][j].isSunk()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    //Sets that prevent attacking the same coord.
     addSuccessfulAttack(coords) {
         const mark = coords.join(',')
         this.attacks.add(mark);
@@ -67,22 +83,9 @@ export class GameBoard {
         const mark = coords.join(',');
         return this.attacks.has(mark) || this.missedAttacks.has(mark);
     }
-
+    //bounds checker;
     isInBounds(coords) {
         const [row, col] = coords;
         return row >= 0 && col >= 0 && row <= 9 && col <= 9;
-    }
-
-    areAllShipsSunk() {
-        for (let i = 0; i < this.rows; i++) {
-            for(let j = 0; j < this.cols; j++) {
-                if (this.board[i][j] instanceof Ship) {
-                    if (!this.board[i][j].isSunk()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 }
