@@ -15,7 +15,7 @@ export class GameBoard {
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = [];
             for(let j = 0; j < this.cols; j++) {
-                this.board[i].push([])
+                this.board[i].push([]);
             }
         }
     }
@@ -28,7 +28,7 @@ export class GameBoard {
             const r = direction === 'x' ? row + i : row;
             const c = direction === 'y' ? cols + i : cols;
             if(!this.isInBounds([r, c])) {
-                throw new Error('Out of Bounds')
+                throw new Error('Out of Bounds');
             } else {
                 this.board[r][c] = ship;
             }
@@ -46,31 +46,31 @@ export class GameBoard {
         if (ship instanceof Ship) {
             ship.hit()
             this.addMissedAttack(coords)
-            return true
+            return true;
         } else {
             this.addSuccessfulAttack(coords);
-            return false
+            return false;
         }
     }
 
     addSuccessfulAttack(coords) {
         const mark = coords.join(',')
-        this.attacks.add(mark)
+        this.attacks.add(mark);
     }
 
     addMissedAttack(coords) {
         const mark = coords.join(',')
-        this.missedAttacks.add(mark)
+        this.missedAttacks.add(mark);
     }
 
     isAlreadyAttacked(coords) {
-        const mark = coords.join(',')
-        return this.attacks.has(mark) || this.missedAttacks.has(mark)
+        const mark = coords.join(',');
+        return this.attacks.has(mark) || this.missedAttacks.has(mark);
     }
 
     isInBounds(coords) {
-        const [row, col] = coords
-        return row >= 0 && col >= 0 && row <= 9 && col <= 9
+        const [row, col] = coords;
+        return row >= 0 && col >= 0 && row <= 9 && col <= 9;
     }
 
     areAllShipsSunk() {
@@ -83,6 +83,6 @@ export class GameBoard {
                 }
             }
         }
-        return true
+        return true;
     }
 }
