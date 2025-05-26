@@ -20,31 +20,70 @@ export class GameBoard {
         }
     }
 
-    placeShip(size, coords) {
+    placeShip(size, coords, direction) {
         const ship = new Ship(size);
         const [row, cols] = coords;
 
         for (let i = 0; i < size; i++) {
-            this.board[row][cols + i] = ship;
+            const r = direction === 'x' ? row + i : row;
+            const c = direction === 'y' ? cols + i : cols;
+            if(!this.isInBounds([r, c])) {
+                throw new Error('Out of Bounds')
+            } else {
+                this.board[r][c] = ship;
+            }
+
         }
     }
 
     receiveAttack(coords) {
-        const ship = [coords[0]][coords[1]];
-        const mark = coords.join(',')
+        const ship = this.board[coords[0]][coords[1]];
+
+        if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
+            return false;
+        }
+
         if (ship instanceof Ship) {
             ship.hit()
+            this.addMissedAttack(coords)
             return true
         } else {
-            //then mark it as a already hitted coordinate, make sure no repeats through the hashset
-            this.missedAttacks.add()
+            this.addSuccessfulAttack(coords);
             return false
         }
     }
 
-    missedAttacks() {
-        
+    addMissedAttack(coords) {
+        const mark = coords.join(',')
+        this.attacks.add(mark)
     }
 
+    addSuccessfulAttack(coords) {
+        const mark = coords.join(',')
+        this.missedAttacks.add(mark)
+    }
 
+    isAlreadyAttacked(coords) {
+        const mark = coords.join(',')
+        return this.attacks.has(mark) || this.missedAttacks.has(mark)
+    }
+
+    isInBounds(coords) {
+        const [row, col] = coords
+        return row >= 0 && col >= 0 && row <= 9 && col <= 9
+    }
+
+    areAllShipsSunk() {
+        for (let i = 0; i < this.rows; i++) {
+            for(let j = 0; j < this.cols; j++) {
+                if (this.board[i][j] instanceof Ship) {
+                    if (!this.board[i][j].isSunk()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true
+    }
 }
