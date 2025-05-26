@@ -1,0 +1,4 @@
+to be noted
+
+do your best to isolate every bit of application functionality from the actual DOM manipulation bits.
+

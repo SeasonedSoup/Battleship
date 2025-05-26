@@ -37,11 +37,11 @@ export class GameBoard {
     }
 
     receiveAttack(coords) {
-        const ship = this.board[coords[0]][coords[1]];
-
+        //check before taking the coords
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
             return false;
         }
+        const ship = this.board[coords[0]][coords[1]];
 
         if (ship instanceof Ship) {
             ship.hit()
@@ -53,12 +53,12 @@ export class GameBoard {
         }
     }
 
-    addMissedAttack(coords) {
+    addSuccessfulAttack(coords) {
         const mark = coords.join(',')
         this.attacks.add(mark)
     }
 
-    addSuccessfulAttack(coords) {
+    addMissedAttack(coords) {
         const mark = coords.join(',')
         this.missedAttacks.add(mark)
     }
@@ -83,7 +83,6 @@ export class GameBoard {
                 }
             }
         }
-
         return true
     }
 }
