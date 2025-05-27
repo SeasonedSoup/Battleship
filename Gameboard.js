@@ -40,11 +40,11 @@ export class GameBoard {
         }
     }
 
-    receiveAttack(coords, enemyBoard) {
+    receiveAttack(coords) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
             return;
         }
-        const ship = enemyBoard.board[coords[0]][coords[1]];
+        const ship = this.board[coords[0]][coords[1]];
 
         if (ship instanceof Ship) {
             ship.hit()

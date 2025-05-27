@@ -8,17 +8,21 @@ export class Player {
     }
 
     placeMultipleRandomShips() {
+        let shipLength = 5
         for (let i = 1; i < 5; i ++) {
             try {
-
+                const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+                this.gameboard.placeShip(shipLength, coords, Math.random() < 0.5 ? 'x' : 'y');
+                shipLength--;
             } catch (e) {
                 i--
             }
         }
+        return this.gameboard
     }
     
-    makeMove(square, enemyBoard)  {
-        return this.gameboard.receiveAttack(square, enemyBoard)
+    makeMove(coords, bruh)  {
+        return this.gameboard.receiveAttack(coords)
     }
 
     isComputer() {
