@@ -1,4 +1,14 @@
+import { GameController } from "./battleShipLogic.js"
 
-test('yes', () => {
-    expect(true).toBe(true)
+test('Active Player is Player Two', () => {
+    const controller = GameController();
+
+    const first = controller.getAttackingPlayer();
+
+    controller.togglePlayerTurns()
+    const second = controller.getReceivingPlayer();
+    
+   
+
+    expect(second).toBe(first)
 })
