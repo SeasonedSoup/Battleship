@@ -42,16 +42,16 @@ export class GameBoard {
 
     receiveAttack(coords) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
-            return;
+            throw new Error('Invalid Coordinate');
         }
         const ship = this.board[coords[0]][coords[1]];
 
         if (ship instanceof Ship) {
             ship.hit()
-            this.addMissedAttack(coords)
+            this.addSuccessfulAttack(coords)
             return true;
         } else {
-            this.addSuccessfulAttack(coords);
+            this.addMissedAttack(coords);
             return false;
         }
     }

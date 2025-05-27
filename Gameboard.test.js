@@ -29,6 +29,6 @@ test('Attack 3 length ship located at 5, 0 vertical', () => {
     testBoard.receiveAttack([5, 0])
     testBoard.receiveAttack([5, 1])
     testBoard.receiveAttack([5, 2])
-    testBoard.receiveAttack([5, 2])
-    expect(testBoard.areAllShipsSunk()).toBe(false);
+    testBoard.receiveAttack([5, 3])
+    expect(testBoard.areAllShipsSunk()).toBe(true);
 })

@@ -3,11 +3,12 @@ import {Player} from "./Player.js"
 const playerOne = new Player(true, "Human");
 const playerTwo = new Player(false, "Computer");
 
+test('makeMove Function', () => {
+    const player2board = playerTwo.gameboard;
 
-test('MakeMove Function', () => {
-    playerTwo.gameboard.placeShip(2, [0,0], 'y')
-    expect(playerOne.makeMove([0,0])).toBe(false);
+    expect(playerOne.makeMove([0, 0], player2board)).toBe(false)
 })
+
 
 test('PlaceAllShips mock function', () => {
     const playerBoard = playerOne.gameboard
@@ -17,3 +18,4 @@ test('PlaceAllShips mock function', () => {
 
     expect(playerBoard.placeShip).toHaveBeenCalledTimes(4);
 })
+

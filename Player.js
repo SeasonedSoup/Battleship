@@ -21,8 +21,15 @@ export class Player {
         return this.gameboard
     }
     
-    makeMove(coords, bruh)  {
-        return this.gameboard.receiveAttack(coords)
+    makeMove(coords, opponent)  {
+        return opponent.receiveAttack(coords);
+    }
+
+    aiMove(opponent) {
+        const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+        if (this.isComputer()) {
+            this.makeMove(coords, opponent);
+        }
     }
 
     isComputer() {
