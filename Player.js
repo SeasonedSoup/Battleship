@@ -25,11 +25,15 @@ export class Player {
         return opponentBoard.receiveAttack(coords);
     }
 
-    aiMove(opponent) {
-        const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-        if (this.isComputer()) {
-            this.makeMove(coords, opponent);
-        }
+    aiMove(opponentBoard) {
+        while (true) {
+            const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+            const result = this.makeMove(coords, opponentBoard);
+            
+            if (result !== undefined) {
+                return result
+            }
+        }   
     }
 
     isComputer() {

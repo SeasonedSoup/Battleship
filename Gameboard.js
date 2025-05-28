@@ -42,7 +42,7 @@ export class GameBoard {
 
     receiveAttack(coords) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
-            return false;
+            return;
         }
         const ship = this.board[coords[0]][coords[1]];
 

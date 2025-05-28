@@ -24,16 +24,17 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         return rounds;
     }
 
-    const playRound = (coords) => {
+    const playRoundAi = () => {
         if (gameOverState) {
             return;
         }
 
         const enemyBoard = receivingPlayer.gameboard
         const attacker = getAttackingPlayer();
-        
-        const resultHit = attacker.makeMove(coords, enemyBoard);
-        if (!resultHit) {
+
+        const resultHit = attacker.aiMove(enemyBoard);
+
+        if(!resultHit) {
             togglePlayerTurns();
         } else {
             if (enemyBoard.areAllShipsSunk()) {
@@ -42,6 +43,25 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         }
     }
 
+    const playRound = (coords) => {
+        if (gameOverState) {
+            return;
+        }
+
+        const enemyBoard = receivingPlayer.gameboard
+        const attacker = getAttackingPlayer();
+       
+        const resultHit = attacker.makeMove(coords, enemyBoard);
+        
+        if (!resultHit) {
+            togglePlayerTurns();
+            playRoundAi();
+        } else {
+            if (enemyBoard.areAllShipsSunk()) {
+                gameOverState = true;               
+            }
+        }
+    }
 
     return {
         getAttackingPlayer,
