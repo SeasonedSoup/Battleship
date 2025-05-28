@@ -15,7 +15,7 @@ export class GameBoard {
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = [];
             for(let j = 0; j < this.cols; j++) {
-                this.board[i].push([]);
+                this.board[i].push('undiscovered');
             }
         }
     }
@@ -42,7 +42,7 @@ export class GameBoard {
 
     receiveAttack(coords) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
-            throw new Error('Invalid Coordinate');
+            return false;
         }
         const ship = this.board[coords[0]][coords[1]];
 

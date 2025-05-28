@@ -8,7 +8,5 @@ test('Active Player is Player Two', () => {
     controller.togglePlayerTurns()
     const second = controller.getReceivingPlayer();
     
-   
-
     expect(second).toBe(first)
 })

@@ -31,12 +31,16 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
 
         const enemyBoard = receivingPlayer.gameboard
         const attacker = getAttackingPlayer();
-
-        attacker.makeMove(coords, enemyBoard);
-
+        
+        const resultHit = attacker.makeMove(coords, enemyBoard);
+        if (!resultHit) {
+            togglePlayerTurns();
+        } else {
+            if (enemyBoard.areAllShipsSunk()) {
+                gameOverState = true;               
+            }
+        }
     }
-
-
 
 
     return {
@@ -44,6 +48,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         getReceivingPlayer,
         togglePlayerTurns,
         roundCounter,
+        playRound,
     }
 }
 

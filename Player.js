@@ -21,8 +21,8 @@ export class Player {
         return this.gameboard
     }
     
-    makeMove(coords, opponent)  {
-        return opponent.receiveAttack(coords);
+    makeMove(coords, opponentBoard)  {
+        return opponentBoard.receiveAttack(coords);
     }
 
     aiMove(opponent) {
