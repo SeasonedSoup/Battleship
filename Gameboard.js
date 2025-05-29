@@ -1,10 +1,12 @@
 import {Ship} from "./Ship.js"
 
 export class GameBoard {
-    constructor() {
-        this.rows = 10;
-        this.cols = 10;
+    constructor(rows = 10, cols = 10) {
+        this.rows = rows
+        this.cols = cols
         this.board = [];
+        this.ships = [];
+
         this.missedAttacks = new Set();
         this.attacks = new Set();
         this.loadBoard();
@@ -15,59 +17,54 @@ export class GameBoard {
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = [];
             for(let j = 0; j < this.cols; j++) {
-                this.board[i].push([]);
+                this.board[i].push({state: "UD", shipRef: null});
             }
         }
     }
 
-    reloadBoard() {
+    getBoard() {
         return this.board;
     }
 
     placeShip(size, coords, direction) {
         const ship = new Ship(size);
-        const [row, cols] = coords;
+        const [row, col] = coords;
 
         for (let i = 0; i < size; i++) {
             const r = direction === 'x' ? row + i : row;
-            const c = direction === 'y' ? cols + i : cols;
+            const c = direction === 'y' ? col + i : col;
             if(!this.isInBounds([r, c])) {
                 throw new Error('Out of Bounds');
             } else {
-                this.board[r][c] = "S";
-                
+                this.board[r][c] = {state: "S", shipRef: ship};
             }
-
         }
+        this.ships.push(ship);
     }
 
     receiveAttack(coords) {
         if (!this.isInBounds(coords) || this.isAlreadyAttacked(coords)) {
             return;
         }
-        const ship = this.board[coords[0]][coords[1]];
+        const [row, col] = coords
+        const ship = this.board[row][col];
 
-        if (ship instanceof Ship) {
-            ship.hit()
+        if (ship.state === "S" && ship.shipRef !== null) {
+            ship.state = 'H';
+            ship.shipRef.hit();
             this.addSuccessfulAttack(coords)
             return true;
-        } else {
+        } else if (ship.state === "UD"){
+            ship.state = 'M';
             this.addMissedAttack(coords);
             return false;
         }
     }
 
     areAllShipsSunk() {
-        for (let i = 0; i < this.rows; i++) {
-            for(let j = 0; j < this.cols; j++) {
-                if (this.board[i][j] instanceof Ship) {
-                    if (!this.board[i][j].isSunk()) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        for (const ship of this.ships) {
+            if (!ship.isSunk()) return false;
+        } return true;
     }
     //Sets that prevent attacking the same coord.
     addSuccessfulAttack(coords) {

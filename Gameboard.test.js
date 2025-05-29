@@ -1,9 +1,5 @@
 import {GameBoard} from "./Gameboard.js"
 
-test('Gameboard has a board', () => {
-    const testBoard = new GameBoard();
-    expect(testBoard).toEqual(testBoard)
-})
 //defaulted to horizontal for now
 test('Put 2 length ship to 0, 0', () => {
     const testBoard = new GameBoard();
@@ -12,7 +8,7 @@ test('Put 2 length ship to 0, 0', () => {
     const cell1 = testBoard.board[0][0]
     const cell2 = testBoard.board[1][0]
 
-    expect(cell1).toBe(cell2);
+    expect(cell1.state).toBe("S");
 })
 //added vertical
 test('Attack 2 length ship located at 0, 0 vertical', () => {

@@ -8,8 +8,8 @@ function ScreenController() {
 
     const firstBoardDiv = document.querySelector('.gameBoard1')
     const secondBoardDiv = document.querySelector('.gameBoard2')
-    const firstBoard = game.getAttackingPlayer().gameboard.reloadBoard();
-    const secondBoard = game.getReceivingPlayer().gameboard.reloadBoard();
+    const firstBoard = game.getAttackingPlayer().gameboard.getBoard();
+    const secondBoard = game.getReceivingPlayer().gameboard.getBoard();
 
     const updateDOM = () => {
         firstBoardDiv.textContent = '';
@@ -37,12 +37,10 @@ function ScreenController() {
 //gets the board and the div and renders it with class cell
 function renderBoard(board, boardDiv) {
     board.forEach((row, rowIndex) => {
-        row.forEach((column ,columnIndex) => {
+        row.forEach((_,columnIndex) => {
             const cellButton = document.createElement('button');
+            //add case TO DO
             cellButton.classList.add('cell');
-            if (column instanceof Ship) {
-                cellButton.classList.add
-            }
             cellButton.dataset.coords = JSON.stringify([rowIndex, columnIndex]);
 
             boardDiv.appendChild(cellButton);
