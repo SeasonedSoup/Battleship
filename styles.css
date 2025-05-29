@@ -10,9 +10,11 @@ html {
     flex-direction: column;
     background-size: cover;
     background: url("./The_Great_Wave_off_Kanagawa.jpg") no-repeat center center/cover;
-    background-position: center;
-    background-repeat: no-repeat;
+}
 
+body {
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -23,11 +25,28 @@ html {
     font-weight: bold;
     letter-spacing: 0.4;
     background: linear-gradient(to right, var(--title-grad-color), var(--title-grad-color-2));
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     color: inherit
 }
 
 .cell {
-    border: 2px solid black;
+    border: 2px solid rgb(177, 179, 99);
+    background-color: rgb(213, 214, 115);
+}
+
+.mainContentGameplay {
+    display: flex;
+    gap: 250px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.board {
+    height: 650px;
+    width: 650px;
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(10, 1fr);
 }

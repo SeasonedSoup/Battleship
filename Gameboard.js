@@ -15,7 +15,7 @@ export class GameBoard {
         for (let i = 0; i < this.rows; i++) {
             this.board[i] = [];
             for(let j = 0; j < this.cols; j++) {
-                this.board[i].push('undiscovered');
+                this.board[i].push([]);
             }
         }
     }
@@ -34,7 +34,8 @@ export class GameBoard {
             if(!this.isInBounds([r, c])) {
                 throw new Error('Out of Bounds');
             } else {
-                this.board[r][c] = ship;
+                this.board[r][c] = "S";
+                
             }
 
         }
