@@ -1,6 +1,5 @@
 import {Player} from "./Player.js"
 
-
 export function GameController(playerOne = new Player(true , "Real"), playerTwo = new Player(false, "Computer")) {
     //variables
     let attackingPlayer = playerOne;

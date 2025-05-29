@@ -27,3 +27,7 @@ html {
     -webkit-text-fill-color: transparent;
     color: inherit
 }
+
+.cell {
+    border: 2px solid black;
+}
