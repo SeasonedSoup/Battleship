@@ -33,6 +33,37 @@ body {
 .cell {
     border: 2px solid rgb(177, 179, 99);
     background-color: rgb(213, 214, 115);
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hit {
+    color: red;
+}
+.cell.hit:before {
+    content: 'X';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+.miss {
+    color: gray;
+    font-size: 2rem;
+}
+.cell.miss::before {
+    content: '•';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+.ship {
+    background-color: #67b5f1;
 }
 
 .mainContentGameplay {

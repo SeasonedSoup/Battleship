@@ -12,11 +12,11 @@ function ScreenController() {
     const secondBoard = game.getReceivingPlayer().gameboard.getBoard();
 
     const updateDOM = () => {
-        firstBoardDiv.textContent = '';
-        secondBoardDiv.textContent = '';
-     
-        renderBoard(firstBoard, firstBoardDiv);
-        renderBoard(secondBoard, secondBoardDiv);
+        [[firstBoard, firstBoardDiv], [secondBoard, secondBoardDiv]].map(
+            ([board, boardDiv]) => {
+                boardDiv.textContent = '';
+                renderBoard(board, boardDiv)
+        })
     }
 
     updateDOM(); 
@@ -30,6 +30,7 @@ function ScreenController() {
         }
         const coords = JSON.parse(target.dataset.coords)
         game.playRound(coords)
+        updateDOM();
     }
 
     secondBoardDiv.addEventListener('click', clickHandlerCells)
@@ -37,10 +38,25 @@ function ScreenController() {
 //gets the board and the div and renders it with class cell
 function renderBoard(board, boardDiv) {
     board.forEach((row, rowIndex) => {
-        row.forEach((_,columnIndex) => {
+        row.forEach((col ,columnIndex) => {
             const cellButton = document.createElement('button');
-            //add case TO DO
             cellButton.classList.add('cell');
+            //add case TO DO
+            switch (col.state) {
+                case 'S':
+                    cellButton.classList.add('ship');
+                    break;
+
+                case 'M':
+                    cellButton.classList.add('miss');
+                    break;
+                
+                case 'H':
+                    cellButton.classList.add('hit');
+                    break;
+
+            }
+           
             cellButton.dataset.coords = JSON.stringify([rowIndex, columnIndex]);
 
             boardDiv.appendChild(cellButton);

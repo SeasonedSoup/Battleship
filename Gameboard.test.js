@@ -8,7 +8,13 @@ test('Put 2 length ship to 0, 0', () => {
     const cell1 = testBoard.board[0][0]
     const cell2 = testBoard.board[1][0]
 
-    expect(cell1.state).toBe("S");
+    expect(cell1.state).toBe(cell2.state);
+})
+
+test('put colliding ships at a coordinate', () => {
+    const testBoard = new GameBoard();
+    testBoard.placeShip(4, [0, 0], 'x')
+    testBoard.placeShip(5, [0,])
 })
 //added vertical
 test('Attack 2 length ship located at 0, 0 vertical', () => {

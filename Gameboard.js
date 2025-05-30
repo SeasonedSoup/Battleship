@@ -25,21 +25,26 @@ export class GameBoard {
     getBoard() {
         return this.board;
     }
-
+    //refactor
     placeShip(size, coords, direction) {
         const ship = new Ship(size);
         const [row, col] = coords;
+        const shipLocations = [];
 
         for (let i = 0; i < size; i++) {
             const r = direction === 'x' ? row + i : row;
             const c = direction === 'y' ? col + i : col;
-            if(!this.isInBounds([r, c])) {
-                throw new Error('Out of Bounds');
-            } else {
-                this.board[r][c] = {state: "S", shipRef: ship};
-            }
+            if(!this.isInBounds([r, c]) || this.board[r][c].state === "S") {
+                return false;
+            } 
+            shipLocations.push([r, c])
+        } 
+        
+        for (const [r, c] of shipLocations) {
+            this.board[r][c] = {state: "S", shipRef: ship};
         }
         this.ships.push(ship);
+        return true
     }
 
     receiveAttack(coords) {

@@ -5,20 +5,21 @@ export class Player {
         this.player = player;
         this.gameboard = new GameBoard();
         this.name = name;
+        this.placeMultipleRandomShips();
     }
-
+    //refactor
     placeMultipleRandomShips() {
         let shipLength = 5
-        for (let i = 1; i < 5; i ++) {
-            try {
-                const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
-                this.gameboard.placeShip(shipLength, coords, Math.random() < 0.5 ? 'x' : 'y');
+        let validPlaced = 0
+        const capacity = 5
+        
+        while (validPlaced < capacity) {
+            const coords = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+            if (this.gameboard.placeShip(shipLength, coords, Math.random() < 0.5 ? 'x' : 'y')){
                 shipLength--;
-            } catch (e) {
-                i--
+                validPlaced++;
             }
         }
-        return this.gameboard
     }
     
     makeMove(coords, opponentBoard)  {
