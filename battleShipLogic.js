@@ -32,13 +32,14 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         const attacker = getAttackingPlayer();
 
         const resultHit = attacker.aiMove(enemyBoard);
-
+    
         if(!resultHit) {
             togglePlayerTurns();
         } else {
             if (enemyBoard.areAllShipsSunk()) {
                 gameOverState = true;               
             }
+            playRoundAi();
         }
     }
 
@@ -51,10 +52,12 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         const attacker = getAttackingPlayer();
        
         const resultHit = attacker.makeMove(coords, enemyBoard);
+        if (resultHit === undefined) return;
         
         if (!resultHit) {
             togglePlayerTurns();
             playRoundAi();
+            
         } else {
             if (enemyBoard.areAllShipsSunk()) {
                 gameOverState = true;               

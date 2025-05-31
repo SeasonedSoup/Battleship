@@ -8,11 +8,17 @@ function ScreenController() {
 
     const firstBoardDiv = document.querySelector('.gameBoard1')
     const secondBoardDiv = document.querySelector('.gameBoard2')
-    const firstBoard = game.getAttackingPlayer().gameboard.getBoard();
-    const secondBoard = game.getReceivingPlayer().gameboard.getBoard();
+    const playerOneDiv = document.querySelector('.playerOne')
+    const playerTwoDiv = document.querySelector('.playerTwo')
+    const firstPlayer =  game.getAttackingPlayer()
+    const secondPlayer = game.getReceivingPlayer()
+    const firstBoard = firstPlayer.gameboard.getBoard();
+
 
     const updateDOM = () => {
-        [[firstBoard, firstBoardDiv], [secondBoard, secondBoardDiv]].map(
+        playerOneDiv.textContent = firstPlayer.name;
+        playerTwoDiv.textContent = secondPlayer.name;
+        [[firstBoard, firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
             ([board, boardDiv]) => {
                 boardDiv.textContent = '';
                 renderBoard(board, boardDiv)
@@ -53,6 +59,9 @@ function renderBoard(board, boardDiv) {
                 
                 case 'H':
                     cellButton.classList.add('hit');
+                    break;
+                case 'hidden':
+                    cellButton.classList.add('hidden');
                     break;
 
             }

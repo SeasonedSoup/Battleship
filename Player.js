@@ -22,7 +22,7 @@ export class Player {
         }
     }
     
-    makeMove(coords, opponentBoard)  {
+    makeMove(coords, opponentBoard = new GameBoard())  {
         return opponentBoard.receiveAttack(coords);
     }
 
@@ -36,6 +36,17 @@ export class Player {
             }
         }   
     }
+
+    getHiddenBoard() {
+        return this.gameboard.board.map(row => {
+            return row.map(col => {
+                if (col.state === 'UD' || col.state === 'S') {
+                    return {state: 'hidden'}
+                } return {state: col.state}
+            })
+        })
+    }
+
 
     isComputer() {
         return !this.player;
