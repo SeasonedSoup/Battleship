@@ -71,6 +71,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         togglePlayerTurns,
         roundCounter,
         playRound,
+        gameOverState
     }
 }
 

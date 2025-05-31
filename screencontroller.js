@@ -13,6 +13,8 @@ function ScreenController() {
     const firstPlayer =  game.getAttackingPlayer()
     const secondPlayer = game.getReceivingPlayer()
     const firstBoard = firstPlayer.gameboard.getBoard();
+    const resultDiv = document.querySelector('.resultWinner')
+    resultDiv.textContent = 'Real Is Winner!'
 
 
     const updateDOM = () => {

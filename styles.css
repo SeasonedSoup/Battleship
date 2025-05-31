@@ -37,6 +37,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.5s;
+}
+
+.cell:hover {
+    transform: scale(0.9);
+    transition: all 0.5s;
+    opacity: 0.7;
 }
 
 .hidden {
@@ -88,4 +95,19 @@ body {
 
 .player{
     font-size: 3rem;
+}
+
+.resultWinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 300px;
+    width: 300px;
+    background-color: gainsboro;
+    z-index: 1;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
