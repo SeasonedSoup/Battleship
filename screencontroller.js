@@ -4,38 +4,38 @@ import { GameController } from "./battleShipLogic.js";
 ScreenController();
 
 function ScreenController() {
-    let game = GameController();
+    let game;
 
-    const firstBoardDiv = document.querySelector('.gameBoard1')
-    const secondBoardDiv = document.querySelector('.gameBoard2')
-    const playerOneDiv = document.querySelector('.playerOne')
-    const playerTwoDiv = document.querySelector('.playerTwo')
-    const firstPlayer =  game.getAttackingPlayer()
-    const secondPlayer = game.getReceivingPlayer()
-    const firstBoard = firstPlayer.gameboard.getBoard();
-    const resultDiv = document.querySelector('.resultWinner')
+    const firstBoardDiv = document.querySelector('.gameBoard1');
+    const secondBoardDiv = document.querySelector('.gameBoard2');
+    const playerOneDiv = document.querySelector('.playerOne');
+    const playerTwoDiv = document.querySelector('.playerTwo');
+    const resultDiv = document.querySelector('.resultWinner');
     const shipToggle = document.querySelector('.shipToggle');
-    const startButton = document.querySelector('.start')
+    const startButton = document.querySelector('.start');
 
     startButton.addEventListener('click', () => {
          //just for vs computer
          alert('Battle Has Started')
         secondBoardDiv.addEventListener('click', clickHandlerCells)
-        shipToggle.classList.add('none');
+        shipToggle.removeEventListener('click', randomizeShips)
+
+        game = GameController();
+        updateDOM();
     })
 
     const updateDOM = () => {
+        const firstPlayer =  game.playerOne;
+        const secondPlayer = game.playerTwo;
         playerOneDiv.textContent = firstPlayer.name;
         playerTwoDiv.textContent = secondPlayer.name;
-        [[firstBoard, firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
+        [[firstPlayer.gameboard.getBoard(), firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
             ([board, boardDiv]) => {
                 boardDiv.textContent = '';
                 renderBoard(board, boardDiv)
         })
         displayWinner();
     }
-
-    updateDOM(); 
     //handles the event for calling the cells get the datacoords using parse with addEventListener
     function clickHandlerCells(e) {
         const target = e.target
