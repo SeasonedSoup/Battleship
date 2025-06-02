@@ -7,7 +7,12 @@ export class Player {
         this.name = name;
         this.placeMultipleRandomShips();
     }
-    //refactor
+    //to be removed
+    placeTestShip() {
+        this.gameboard.placeShip(1, [0, 0], 'x')
+    }
+
+    //to be refactored to maybe just a button for now but dragging implementation
     placeMultipleRandomShips() {
         let shipLength = 5
         let validPlaced = 0

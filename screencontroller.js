@@ -14,8 +14,15 @@ function ScreenController() {
     const secondPlayer = game.getReceivingPlayer()
     const firstBoard = firstPlayer.gameboard.getBoard();
     const resultDiv = document.querySelector('.resultWinner')
-    resultDiv.textContent = 'Real Is Winner!'
+    const shipToggle = document.querySelector('.shipToggle');
+    const startButton = document.querySelector('.start')
 
+    startButton.addEventListener('click', () => {
+         //just for vs computer
+         alert('Battle Has Started')
+        secondBoardDiv.addEventListener('click', clickHandlerCells)
+        shipToggle.classList.add('none');
+    })
 
     const updateDOM = () => {
         playerOneDiv.textContent = firstPlayer.name;
@@ -25,14 +32,13 @@ function ScreenController() {
                 boardDiv.textContent = '';
                 renderBoard(board, boardDiv)
         })
+        displayWinner();
     }
 
     updateDOM(); 
     //handles the event for calling the cells get the datacoords using parse with addEventListener
     function clickHandlerCells(e) {
         const target = e.target
-        console.log('clicked!')
-
         if(!target.classList.contains('cell')) {
             return;
         }
@@ -40,8 +46,29 @@ function ScreenController() {
         game.playRound(coords)
         updateDOM();
     }
+    
+   
 
-    secondBoardDiv.addEventListener('click', clickHandlerCells)
+    function displayWinner() {
+        const winnerText = game.getWinner();
+
+        if(winnerText) {
+            const message = document.createElement("p");
+            message.textContent = `${winnerText} Wins!`;
+            resultDiv.appendChild(message);
+            resultDiv.textContent = `${winnerText} Wins!`;
+        }
+    }
+
+    
+    function randomizeShips() {
+        [[firstPlayer], [secondPlayer]].forEach(([player]) => {
+            player.gameboard.loadBoard()
+            player.placeMultipleRandomShips();
+        })
+        updateDOM();
+    }
+    shipToggle.addEventListener('click', randomizeShips)
 }
 //gets the board and the div and renders it with class cell
 function renderBoard(board, boardDiv) {

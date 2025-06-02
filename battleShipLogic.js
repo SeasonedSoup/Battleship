@@ -11,9 +11,11 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     const getReceivingPlayer = () => receivingPlayer
 
     const togglePlayerTurns = () => {
-        let tmp = attackingPlayer
-        attackingPlayer = receivingPlayer;
-        receivingPlayer = tmp;
+        if(!gameOverState) {
+            let tmp = attackingPlayer
+            attackingPlayer = receivingPlayer;
+            receivingPlayer = tmp;
+        }
     }
 
     let rounds = 0;
@@ -45,6 +47,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
 
     const playRound = (coords) => {
         if (gameOverState) {
+            console.log('The Game Has Ended')
             return;
         }
 
@@ -65,12 +68,24 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         }
     }
 
+    const getWinner = () => {
+        const attacker = getAttackingPlayer();
+
+        if (getReceivingPlayer().gameboard.areAllShipsSunk()) {
+            gameOverState = true
+            return attacker.name
+        } else {
+            return '';
+        }
+    }
+
     return {
         getAttackingPlayer,
         getReceivingPlayer,
         togglePlayerTurns,
         roundCounter,
         playRound,
+        getWinner,
         gameOverState
     }
 }
