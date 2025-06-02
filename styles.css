@@ -104,12 +104,13 @@ body {
     transform: translate(-50%, -50%);
     height: 300px;
     width: 300px;
-    background-color: gainsboro;
+    background-color: rgb(51, 97, 203);
     z-index: 1;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 120px;
 }
 
 .none {

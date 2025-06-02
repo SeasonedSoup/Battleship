@@ -18,8 +18,7 @@ function ScreenController() {
          //just for vs computer
          alert('Battle Has Started')
         secondBoardDiv.addEventListener('click', clickHandlerCells)
-        shipToggle.removeEventListener('click', randomizeShips)
-
+        shipToggle.addEventListener('click', randomizeShips)
         game = GameController();
         updateDOM();
     })
@@ -62,13 +61,14 @@ function ScreenController() {
 
     
     function randomizeShips() {
+        const firstPlayer =  game.playerOne;
+        const secondPlayer = game.playerTwo;
         [[firstPlayer], [secondPlayer]].forEach(([player]) => {
             player.gameboard.loadBoard()
             player.placeMultipleRandomShips();
         })
         updateDOM();
     }
-    shipToggle.addEventListener('click', randomizeShips)
 }
 //gets the board and the div and renders it with class cell
 function renderBoard(board, boardDiv) {
