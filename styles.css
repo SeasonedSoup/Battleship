@@ -2,10 +2,13 @@
     --title-grad-color: rgb(207, 136, 136);
     --title-grad-color-2: rgb(228, 28, 28);
 }
+*, *::before, *::after {
+    box-sizing: border-box;
+}
 
 html {
     opacity: 0.7;
-    min-height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background-size: cover;
@@ -13,10 +16,10 @@ html {
 }
 
 body {
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }
-
 
 .gameTitle {
     font-family: "Oswald", sans-serif;
@@ -30,6 +33,88 @@ body {
     color: inherit
 }
 
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    font-size: 2rem;
+    background-color: rgb(136, 125, 125);
+    padding: 20px;
+    border-radius: 8px;
+}
+/* intro Buttons */
+.vsAi, .vsPlayer, .credits{
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid black;
+    width: 250px;
+}
+
+.mainContentGameplay {
+    display: flex;
+    gap: 400px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.board {
+    height: 650px;
+    width: 650px;
+    display: grid;
+    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.player{
+    font-size: 3rem;
+}
+
+.resultWinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 300px;
+    width: 300px;
+    background-color: rgb(51, 97, 203);
+    z-index: 1;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 120px;
+}
+
+.none {
+    display: none;
+}
+
+.reference {
+    position: fixed; /* or absolute */
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    background: white;
+    padding: 1em;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+    
+  }
+
+.reference.active {
+    transform: translateX(0);
+}
+/* Cell Designs */
 .cell {
     border: 2px solid rgb(177, 179, 99);
     background-color: rgb(213, 214, 115);
@@ -75,44 +160,4 @@ body {
 }
 .ship {
     background-color: #67b5f1;
-}
-
-.mainContentGameplay {
-    display: flex;
-    gap: 400px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px;
-}
-
-.board {
-    height: 650px;
-    width: 650px;
-    display: grid;
-    grid-template-rows: repeat(10, 1fr);
-    grid-template-columns: repeat(10, 1fr);
-}
-
-.player{
-    font-size: 3rem;
-}
-
-.resultWinner {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    height: 300px;
-    width: 300px;
-    background-color: rgb(51, 97, 203);
-    z-index: 1;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 120px;
-}
-
-.none {
-    display: none;
 }

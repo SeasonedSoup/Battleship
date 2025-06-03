@@ -1,9 +1,6 @@
 import { GameController } from "./battleShipLogic.js";
 
-
-ScreenController();
-
-function ScreenController() {
+export function ScreenController() {
     let game;
 
     const firstBoardDiv = document.querySelector('.gameBoard1');
@@ -16,7 +13,6 @@ function ScreenController() {
 
     startButton.addEventListener('click', () => {
          //just for vs computer
-         alert('Battle Has Started')
         secondBoardDiv.addEventListener('click', clickHandlerCells)
         shipToggle.addEventListener('click', randomizeShips)
         game = GameController();
@@ -46,8 +42,6 @@ function ScreenController() {
         updateDOM();
     }
     
-   
-
     function displayWinner() {
         const winnerText = game.getWinner();
 
