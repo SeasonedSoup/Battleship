@@ -79,6 +79,14 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         }
     }
 
+    const randomizeShips = () => {
+        playerOne.gameboard.loadBoard();
+        playerTwo.gameboard.loadBoard();
+
+        playerOne.placeMultipleRandomShips();
+        playerTwo.placeMultipleRandomShips();
+    }
+
     return {
         getAttackingPlayer,
         getReceivingPlayer,
@@ -86,7 +94,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         roundCounter,
         playRound,
         getWinner,
-        gameOverState,
+        randomizeShips,
         playerOne,
         playerTwo
     }

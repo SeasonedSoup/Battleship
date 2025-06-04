@@ -12,11 +12,12 @@ export function loadGameIntro() {
     const vsAiButton = document.createElement('button');
     vsAiButton.textContent = 'Vs Ai';
     vsAiButton.classList.add('vsAi');
-    vsAiButton.addEventListener('click', loadVsAiBattle);
+    vsAiButton.addEventListener('click', loadBattle);
 
     const vsPlayerButton = document.createElement('button');
     vsPlayerButton.textContent = 'Vs Player';
     vsPlayerButton.classList.add('vsPlayer')
+    vsPlayerButton.addEventListener('click', loadPlayerSetUp1)
 
     const credits = document.createElement('button');
     credits.textContent = 'Credits';
@@ -53,80 +54,167 @@ export function loadGameIntro() {
     body.appendChild(content);
 }
 
-function loadVsAiBattle() {
+function loadBattle() {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
-  body.textContent = '';
+    body.textContent = '';
 
-  const aiGameplay = document.createElement('div');
-  addClass(aiGameplay, 'mainContentGameplay');
+    const aiGameplay = document.createElement('div');
+    addClass(aiGameplay, 'mainContentGameplay');
 
-  const boardWrapper1 = document.createElement('div');
-  addClass(boardWrapper1, 'BoardWrapper');
+    const boardWrapper1 = document.createElement('div');
+    addClass(boardWrapper1, 'BoardWrapper');
 
-  const subHeader = document.createElement('div');
-  addClass(subHeader, 'subHeader');
+    const subHeader = document.createElement('div');
+    addClass(subHeader, 'subHeader');
 
-  const playerOneName = document.createElement('div');
-  addClass(playerOneName, 'playerOne', 'player');
+    const playerOneName = document.createElement('div');
+    addClass(playerOneName, 'playerOne', 'player');
 
-  const playerOneBoard = document.createElement('div');
-  addClass(playerOneBoard, 'gameBoard1', 'board');
+    const playerOneBoard = document.createElement('div');
+    addClass(playerOneBoard, 'gameBoard1', 'board');
 
-  // build first BoardWrapper
-  subHeader.appendChild(playerOneName);
-  subHeader.appendChild(playerOneBoard);
-  boardWrapper1.appendChild(subHeader);
+    // build first BoardWrapper
+    subHeader.appendChild(playerOneName);
+    subHeader.appendChild(playerOneBoard);
+    boardWrapper1.appendChild(subHeader);
 
-  // second BoardWrapper
-  const boardWrapper2 = document.createElement('div');
-  addClass(boardWrapper2, 'BoardWrapper');
+    // second BoardWrapper
+    const boardWrapper2 = document.createElement('div');
+    addClass(boardWrapper2, 'BoardWrapper');
 
-  const playerTwoName = document.createElement('div');
-  addClass(playerTwoName, 'playerTwo', 'player');
+    const playerTwoName = document.createElement('div');
+    addClass(playerTwoName, 'playerTwo', 'player');
 
-  const playerTwoBoard = document.createElement('div');
-  addClass(playerTwoBoard, 'gameBoard2', 'board');
+    const playerTwoBoard = document.createElement('div');
+    addClass(playerTwoBoard, 'gameBoard2', 'board');
 
-  boardWrapper2.appendChild(playerTwoName);
-  boardWrapper2.appendChild(playerTwoBoard);
+    boardWrapper2.appendChild(playerTwoName);
+    boardWrapper2.appendChild(playerTwoBoard);
 
-  // append both board wrappers to main container
-  aiGameplay.appendChild(boardWrapper1);
-  aiGameplay.appendChild(boardWrapper2);
+    // append both board wrappers to main container
+    aiGameplay.appendChild(boardWrapper1);
+    aiGameplay.appendChild(boardWrapper2);
 
-  // resultWinner div
-  const resultWinner = document.createElement('div');
-  addClass(resultWinner, 'resultWinner');
+    // resultWinner div
+    const resultWinner = document.createElement('div');
+    addClass(resultWinner, 'resultWinner');
 
-  const shipToggleBtn = document.createElement('button');
-  addClass(shipToggleBtn, 'shipToggle');
-  shipToggleBtn.textContent = 'Randomize Ships';
+    const shipReadyButton = document.createElement('button');
+    addClass(shipReadyButton, 'ready', 'none');
+    shipReadyButton.textContent = 'Prepare Battle';
 
-  const startBtn = document.createElement('button');
-  addClass(startBtn, 'start');
-  startBtn.textContent = 'Start Battle';
+    const shipToggleBtn = document.createElement('button');
+    addClass(shipToggleBtn, 'shipToggle', 'none');
+    shipToggleBtn.textContent = 'Randomize Ships';
+    
 
-  resultWinner.appendChild(shipToggleBtn);
-  resultWinner.appendChild(startBtn);
+    const startBtn = document.createElement('button');
+    addClass(startBtn, 'start');
+    startBtn.textContent = 'Start Battle';
+    startBtn.addEventListener('click', () => {
+        startBtn.classList.add('none')
+    })
 
-  // append main content and resultWinner to body
-  body.appendChild(aiGameplay);
-  body.appendChild(resultWinner);
-  
-  //call logic
-  ScreenController();
+    resultWinner.appendChild(shipReadyButton);
+    resultWinner.appendChild(shipToggleBtn);
+    resultWinner.appendChild(startBtn);
+
+    // append main content and resultWinner to body
+    body.appendChild(aiGameplay);
+    body.appendChild(resultWinner);
+    
+    //call logic
+    ScreenController();
+}   
+
+function loadPlayerSetUp1() {
+    const addClass = ((element, ...className) => element.classList.add(...className));
+
+    const body = document.querySelector('body');
+    body.textContent = '';
+
+    const playerGamePlay = document.createElement('div');
+    addClass(playerGamePlay, 'gameplay');
+
+    const boardWrapper = document.createElement('div')
+    addClass(boardWrapper, 'BoardWrapper');
+
+    const subHeader = document.createElement('div');
+    addClass(subHeader, 'subHeader');
+
+    const playerOne = document.createElement('div');
+    addClass(playerOne, 'playerOne', 'player');
+
+    const playerBoard = document.createElement('div');
+    addClass(playerBoard, 'gameBoard1', 'board');
+
+    const randomizeShipsButton = document.createElement('button');
+    randomizeShipsButton.textContent = 'Randomize Placements'
+    addClass(randomizeShipsButton, 'randomizeShips');
+
+    const readyButton = document.createElement('button');
+    addClass(passButton, 'ready');
+    readyButton.addEventListener('click', loadPlayerSetUp2)
+    
+    subHeader.appendChild(playerOne);
+    subHeader.appendChild(playerBoard);
+    boardWrapper.appendChild(subHeader);
+    playerGamePlay.appendChild(boardWrapper);
+    body.appendChild(playerGamePlay);
+    body.appendChild(randomizeShipsButton);
+    body.appendChild(readyButton);
 }
 
-//loadGamePlay
-/* <div class="mainContentGameplay">
-        <div class="BoardWrapper">
-            <div class="subHeader">
-                <div class="playerOne player"></div>
-                <div class="gameBoard1 board"></div>
+function loadPlayerSetUp2() {
+    const addClass = ((element, ...className) => element.classList.add(...className));
+
+    const body = document.querySelector('body');
+    body.textContent = '';
+
+    const playerGamePlay = document.createElement('div');
+    addClass(playerGamePlay, 'gameplay');
+
+    const boardWrapper = document.createElement('div')
+    addClass(boardWrapper, 'BoardWrapper');
+
+    const subHeader = document.createElement('div');
+    addClass(subHeader, 'subHeader');
+
+    const playerOne = document.createElement('div');
+    addClass(playerOne, 'playerOne', 'player');
+
+    const playerBoard = document.createElement('div');
+    addClass(playerBoard, 'gameBoard1', 'board');
+
+    boardWrapper.appendChild(subHeader);
+
+    const randomizeShipsButton = document.createElement('button');
+    randomizeShipsButton.textContent = 'Randomize Placements'
+    addClass(randomizeShipsButton, 'randomizeShips');
+
+    const readyButton = document.createElement('button');
+    addClass(passButton, 'ready');
+    readyButton.addEventListener('click', loadBattle);
+
+    subHeader.appendChild(playerOne);
+    subHeader.appendChild(playerBoard);
+    boardWrapper.appendChild(subHeader);
+    playerGamePlay.appendChild(boardWrapper);
+    body.appendChild(playerGamePlay);
+    body.appendChild(randomizeShipsButton);
+    body.appendChild(readyButton);
+}
+
+//loadGamePlay structure
+/*<div class="mainContentGameplay">
+          <div class="BoardWrapper">
+              <div class="subHeader">
+                    <div class="playerOne player"></div>
+                    <div class="gameBoard1 board"></div>
+                </div>
             </div>
-        </div>
 
         <div class="BoardWrapper">
             <div class="playerTwo player"></div>

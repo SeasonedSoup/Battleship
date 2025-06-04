@@ -2,6 +2,7 @@ import { GameController } from "./battleShipLogic.js";
 
 export function ScreenController() {
     let game;
+    let gamephase = 'setup';
 
     const firstBoardDiv = document.querySelector('.gameBoard1');
     const secondBoardDiv = document.querySelector('.gameBoard2');
@@ -10,15 +11,29 @@ export function ScreenController() {
     const resultDiv = document.querySelector('.resultWinner');
     const shipToggle = document.querySelector('.shipToggle');
     const startButton = document.querySelector('.start');
+    const prepareButton = document.querySelector('.ready');
 
     startButton.addEventListener('click', () => {
          //just for vs computer
+         game = GameController();
+        
+        shipToggle.addEventListener('click', () => {
+            game.randomizeShips();
+            updateDOM();
+        })
         secondBoardDiv.addEventListener('click', clickHandlerCells)
-        shipToggle.addEventListener('click', randomizeShips)
-        game = GameController();
         updateDOM();
-    })
 
+        //displays the gameplay
+        shipToggle.classList.remove('none');
+        prepareButton.classList.remove('none');
+        prepareButton.addEventListener('click', () => {
+            gamephase = 'battle';
+            shipToggle.classList.add('none');
+            prepareButton.classList.add('none');
+        })
+    })
+    
     const updateDOM = () => {
         const firstPlayer =  game.playerOne;
         const secondPlayer = game.playerTwo;
@@ -34,9 +49,10 @@ export function ScreenController() {
     //handles the event for calling the cells get the datacoords using parse with addEventListener
     function clickHandlerCells(e) {
         const target = e.target
-        if(!target.classList.contains('cell')) {
+        if(!target.classList.contains('cell') || gamephase === 'setup') {
             return;
         }
+
         const coords = JSON.parse(target.dataset.coords)
         game.playRound(coords)
         updateDOM();
@@ -51,17 +67,6 @@ export function ScreenController() {
             resultDiv.appendChild(message);
             resultDiv.textContent = `${winnerText} Wins!`;
         }
-    }
-
-    
-    function randomizeShips() {
-        const firstPlayer =  game.playerOne;
-        const secondPlayer = game.playerTwo;
-        [[firstPlayer], [secondPlayer]].forEach(([player]) => {
-            player.gameboard.loadBoard()
-            player.placeMultipleRandomShips();
-        })
-        updateDOM();
     }
 }
 //gets the board and the div and renders it with class cell
