@@ -20,6 +20,7 @@ export class GameBoard {
                 this.board[i].push({state: "UD", shipRef: null});
             }
         }
+        this.ships = [];
     }
     
     getBoard() {
