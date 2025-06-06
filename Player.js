@@ -9,10 +9,6 @@ export class Player {
         //for ai smart
         this.lasthit = null
     }
-    //to be removed
-    placeTestShip() {
-        this.gameboard.placeShip(1, [0, 0], 'x')
-    }
 
     //to be refactored to maybe just a button for now but dragging implementation
     placeMultipleRandomShips() {
@@ -90,6 +86,12 @@ export class Player {
                 } return {state: col.state}
             })
         })
+    }
+    getPlayerBoard() {
+        return this.gameboard.getBoard();
+    }
+    resetPlayerBoard() {
+        this.gameboard.loadBoard();
     }
 
 

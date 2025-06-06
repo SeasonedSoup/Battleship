@@ -1,4 +1,4 @@
-import { ScreenController } from "./screencontroller.js";
+import { ScreenController, setUpFlowController } from "./screencontroller.js";
 
 export function loadGameIntro() {
     const body = document.querySelector('body');
@@ -17,7 +17,7 @@ export function loadGameIntro() {
     const vsPlayerButton = document.createElement('button');
     vsPlayerButton.textContent = 'Vs Player';
     vsPlayerButton.classList.add('vsPlayer')
-    vsPlayerButton.addEventListener('click', loadPlayerSetUp1)
+    vsPlayerButton.addEventListener('click', () => loadPlayerSetUp());
 
     const credits = document.createElement('button');
     credits.textContent = 'Credits';
@@ -129,7 +129,7 @@ function loadBattle() {
     ScreenController();
 }   
 
-function loadPlayerSetUp1() {
+function loadPlayerSetUp(player = 'firstPlayer') {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -144,85 +144,52 @@ function loadPlayerSetUp1() {
     const subHeader = document.createElement('div');
     addClass(subHeader, 'subHeader');
 
-    const playerOne = document.createElement('div');
-    addClass(playerOne, 'playerOne', 'player');
+    const playerNameDiv = document.createElement('div');
+    addClass(playerNameDiv, 'playerName', 'player');
 
     const playerBoard = document.createElement('div');
-    addClass(playerBoard, 'gameBoard1', 'board');
+    addClass(playerBoard, 'gameBoard', 'board');
 
     const randomizeShipsButton = document.createElement('button');
     randomizeShipsButton.textContent = 'Randomize Placements'
     addClass(randomizeShipsButton, 'randomizeShips');
 
-    const readyButton = document.createElement('button');
+    const passButton = document.createElement('button');
     addClass(passButton, 'ready');
-    readyButton.addEventListener('click', loadPlayerSetUp2)
+    passButton.addEventListener('click', intermission);
+    passButton.textContent = 'Pass To Next Player'
     
-    subHeader.appendChild(playerOne);
+    subHeader.appendChild(playerNameDiv);
     subHeader.appendChild(playerBoard);
     boardWrapper.appendChild(subHeader);
     playerGamePlay.appendChild(boardWrapper);
     body.appendChild(playerGamePlay);
     body.appendChild(randomizeShipsButton);
-    body.appendChild(readyButton);
+    body.appendChild(passButton);
+
+    setUpFlowController(player);
 }
 
-function loadPlayerSetUp2() {
+function intermission() {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
     body.textContent = '';
 
-    const playerGamePlay = document.createElement('div');
-    addClass(playerGamePlay, 'gameplay');
+    const modalDiv = document.createElement('div');
+    addClass(modalDiv, 'modalDiv');
 
-    const boardWrapper = document.createElement('div')
-    addClass(boardWrapper, 'BoardWrapper');
+    const informPass = document.createElement('h1');
+    addClass(informPass, 'informPass');
+    informPass.textContent = 'Pass it onto the next player! (click ready if you are the next player)';
+    
+    const readyButton = document.createElement('button')
+    addClass(readyButton, 'readyButton');
+    readyButton.textContent = 'Ready';
+    readyButton.addEventListener('click', loadPlayerSetUp)
 
-    const subHeader = document.createElement('div');
-    addClass(subHeader, 'subHeader');
+    modalDiv.appendChild(informPass);
+    modalDiv.appendChild(readyButton);
 
-    const playerOne = document.createElement('div');
-    addClass(playerOne, 'playerOne', 'player');
-
-    const playerBoard = document.createElement('div');
-    addClass(playerBoard, 'gameBoard1', 'board');
-
-    boardWrapper.appendChild(subHeader);
-
-    const randomizeShipsButton = document.createElement('button');
-    randomizeShipsButton.textContent = 'Randomize Placements'
-    addClass(randomizeShipsButton, 'randomizeShips');
-
-    const readyButton = document.createElement('button');
-    addClass(passButton, 'ready');
-    readyButton.addEventListener('click', loadBattle);
-
-    subHeader.appendChild(playerOne);
-    subHeader.appendChild(playerBoard);
-    boardWrapper.appendChild(subHeader);
-    playerGamePlay.appendChild(boardWrapper);
-    body.appendChild(playerGamePlay);
-    body.appendChild(randomizeShipsButton);
-    body.appendChild(readyButton);
+    body.appendChild(modalDiv);
 }
-
-//loadGamePlay structure
-/*<div class="mainContentGameplay">
-          <div class="BoardWrapper">
-              <div class="subHeader">
-                    <div class="playerOne player"></div>
-                    <div class="gameBoard1 board"></div>
-                </div>
-            </div>
-
-        <div class="BoardWrapper">
-            <div class="playerTwo player"></div>
-            <div class="gameBoard2 board"></div>
-        </div>
-    </div>
-    <div class="resultWinner">
-        <button class="shipToggle">Randomize Ships</button>
-        <button class="start">Start Battle</button>
-    </div>
-    <footer>By @SeasonedSoups</footer> */

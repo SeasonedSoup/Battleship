@@ -1,6 +1,23 @@
 import { GameController } from "./battleShipLogic.js";
 
-export function ScreenController() {
+export function setUpFlowController(currPlayer = 'firstPlayer') {
+    let game = GameController();
+
+    if (currPlayer === 'firstPlayer') {
+        const firstBoardDiv = document.querySelector('.gameBoard');
+        console.log('Button exists:', document.querySelector('.randomizeShips'));
+        const randomSetUpButton = document.querySelector('.randomizeShips')
+        randomSetUpButton.addEventListener('click', () => {
+            console.log('this is getting clicked')
+        })
+        const player = game.playerOne
+
+        renderBoard(player.getPlayerBoard(), firstBoardDiv);
+    }
+}
+
+//starting battle responsibility
+export function ScreenController(ai = true, firstPlayer = null, secondPlayer = null) {
     let game;
     let gamephase = 'setup';
 
@@ -18,7 +35,7 @@ export function ScreenController() {
          game = GameController();
         
         shipToggle.addEventListener('click', () => {
-            game.randomizeShips();
+            game.randomizeShipsBoth();
             updateDOM();
         })
         secondBoardDiv.addEventListener('click', clickHandlerCells)
@@ -33,7 +50,7 @@ export function ScreenController() {
             prepareButton.classList.add('none');
         })
     })
-    
+    //mixed dynamic
     const updateDOM = () => {
         const firstPlayer =  game.playerOne;
         const secondPlayer = game.playerTwo;
@@ -69,6 +86,7 @@ export function ScreenController() {
         }
     }
 }
+
 //gets the board and the div and renders it with class cell
 function renderBoard(board, boardDiv) {
     board.forEach((row, rowIndex) => {

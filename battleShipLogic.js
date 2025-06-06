@@ -44,7 +44,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
             playRoundAi();
         }
     }
-
+                            //check if playerTwo is an Ai
     const playRound = (coords) => {
         if (gameOverState) {
             console.log('The Game Has Ended')
@@ -59,8 +59,9 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         
         if (!resultHit) {
             togglePlayerTurns();
-            playRoundAi();
-            
+            if(playerTwo.isComputer()) {
+                playRoundAi();
+            }
         } else {
             if (enemyBoard.areAllShipsSunk()) {
                 gameOverState = true;               
@@ -78,13 +79,17 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
             return '';
         }
     }
-
-    const randomizeShips = () => {
-        playerOne.gameboard.loadBoard();
-        playerTwo.gameboard.loadBoard();
+    //resets the board and reappends with new ships
+    const randomizeShipsBoth = () => {
+        playerOne.resetPlayerBoard();
+        playerTwo.resetPlayerBoard();
 
         playerOne.placeMultipleRandomShips();
         playerTwo.placeMultipleRandomShips();
+    }
+
+    const randomizePlayerShips = (player) => {
+        player.gameboard.loadBoard()
     }
 
     return {
@@ -94,7 +99,8 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         roundCounter,
         playRound,
         getWinner,
-        randomizeShips,
+        randomizeShipsBoth,
+        randomizePlayerShips,
         playerOne,
         playerTwo
     }
