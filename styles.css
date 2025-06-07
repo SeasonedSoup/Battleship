@@ -50,6 +50,7 @@ body {
     background-color: rgb(136, 125, 125);
     padding: 20px;
     border-radius: 8px;
+    transform: rotate(12deg) translate(350px, -240px);
 }
 /* intro Buttons */
 .vsAi, .vsPlayer, .credits{

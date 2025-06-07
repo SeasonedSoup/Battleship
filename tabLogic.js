@@ -17,7 +17,7 @@ export function loadGameIntro() {
     const vsPlayerButton = document.createElement('button');
     vsPlayerButton.textContent = 'Vs Player';
     vsPlayerButton.classList.add('vsPlayer')
-    vsPlayerButton.addEventListener('click', () => loadPlayerSetUp());
+    vsPlayerButton.addEventListener('click', () => loadPlayerSetUp('firstPlayer'));
 
     const credits = document.createElement('button');
     credits.textContent = 'Credits';
@@ -129,7 +129,7 @@ function loadBattle() {
     ScreenController();
 }   
 
-function loadPlayerSetUp(player = 'firstPlayer') {
+function loadPlayerSetUp(player) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -170,7 +170,7 @@ function loadPlayerSetUp(player = 'firstPlayer') {
     setUpFlowController(player);
 }
 
-function intermission() {
+function intermission(player) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -186,7 +186,7 @@ function intermission() {
     const readyButton = document.createElement('button')
     addClass(readyButton, 'readyButton');
     readyButton.textContent = 'Ready';
-    readyButton.addEventListener('click', loadPlayerSetUp)
+    readyButton.addEventListener('click', () => loadPlayerSetUp(player))
 
     modalDiv.appendChild(informPass);
     modalDiv.appendChild(readyButton);

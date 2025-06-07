@@ -1,19 +1,33 @@
 import { GameController } from "./battleShipLogic.js";
+//get the gamecontroller separately
+function GameInstanceFunc() {
+    let game = GameController(); 
 
+    const getGameInstance = () => {
+        return game;
+    } 
+    const newGameInstance = () => game = GameController();
+
+    return {
+        getGameInstance,
+        newGameInstance
+    }
+}
 export function setUpFlowController(currPlayer = 'firstPlayer') {
     let game = GameController();
 
     if (currPlayer === 'firstPlayer') {
         const firstBoardDiv = document.querySelector('.gameBoard');
-        console.log('Button exists:', document.querySelector('.randomizeShips'));
         const randomSetUpButton = document.querySelector('.randomizeShips')
-        randomSetUpButton.addEventListener('click', () => {
-            console.log('this is getting clicked')
-        })
         const player = game.playerOne
+        randomSetUpButton.addEventListener('click', () => {
+            firstBoardDiv.textContent = '';
+            game.randomizePlayerShips(player);
+            renderBoard(player.getPlayerBoard(), firstBoardDiv);
+        })
 
         renderBoard(player.getPlayerBoard(), firstBoardDiv);
-    }
+    } 
 }
 
 //starting battle responsibility

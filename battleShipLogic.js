@@ -79,7 +79,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
             return '';
         }
     }
-    //resets the board and reappends with new ships
+    //resets the board and reappends with new ships for vs ai
     const randomizeShipsBoth = () => {
         playerOne.resetPlayerBoard();
         playerTwo.resetPlayerBoard();
@@ -89,7 +89,8 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     }
 
     const randomizePlayerShips = (player) => {
-        player.gameboard.loadBoard()
+        player.resetPlayerBoard();
+        player.placeMultipleRandomShips();
     }
 
     return {
