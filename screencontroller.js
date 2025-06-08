@@ -2,7 +2,7 @@ import { GameController } from "./battleShipLogic.js";
 //get the gamecontroller separately
 function GameInstanceFunc() {
     let game = GameController(); 
-
+    console.log('this should load only once')
     const getGameInstance = () => {
         return game;
     } 
@@ -10,28 +10,34 @@ function GameInstanceFunc() {
 
     return {
         getGameInstance,
-        newGameInstance
+        newGameInstance,
     }
 }
+
+let gameFunc = GameInstanceFunc();
+
 export function setUpFlowController(currPlayer = 'firstPlayer') {
-    let game = GameController();
+    let game = gameFunc.getGameInstance();
 
     if (currPlayer === 'firstPlayer') {
         const firstBoardDiv = document.querySelector('.gameBoard');
-        const randomSetUpButton = document.querySelector('.randomizeShips')
+        const randomSetUpButton = document.querySelector('.randomizeShips');
+        const passButton = document.querySelector('.ready');
+
         const player = game.playerOne
+        //eventListeners
         randomSetUpButton.addEventListener('click', () => {
             firstBoardDiv.textContent = '';
             game.randomizePlayerShips(player);
             renderBoard(player.getPlayerBoard(), firstBoardDiv);
         })
-
+      
         renderBoard(player.getPlayerBoard(), firstBoardDiv);
     } 
 }
 
 //starting battle responsibility
-export function ScreenController(ai = true, firstPlayer = null, secondPlayer = null) {
+export function ScreenController() {
     let game;
     let gamephase = 'setup';
 
@@ -46,7 +52,7 @@ export function ScreenController(ai = true, firstPlayer = null, secondPlayer = n
 
     startButton.addEventListener('click', () => {
          //just for vs computer
-         game = GameController();
+         game = gameFunc.getGameInstance();
         
         shipToggle.addEventListener('click', () => {
             game.randomizeShipsBoth();
@@ -79,8 +85,9 @@ export function ScreenController(ai = true, firstPlayer = null, secondPlayer = n
     }
     //handles the event for calling the cells get the datacoords using parse with addEventListener
     function clickHandlerCells(e) {
+
         const target = e.target
-        if(!target.classList.contains('cell') || gamephase === 'setup') {
+        if(!target.classList.contains('cell') || gamephase === 'setup' || game.getGameOverState()) {
             return;
         }
 
@@ -95,8 +102,13 @@ export function ScreenController(ai = true, firstPlayer = null, secondPlayer = n
         if(winnerText) {
             const message = document.createElement("p");
             message.textContent = `${winnerText} Wins!`;
-            resultDiv.appendChild(message);
-            resultDiv.textContent = `${winnerText} Wins!`;
+            resultDiv.insertBefore(message, resultDiv.firstChild);
+
+            const goBackToIntro = document.querySelector('.goBack')
+            goBackToIntro.classList.remove('none');
+            goBackToIntro.addEventListener('click', () => {
+                gameFunc.newGameInstance();
+            })
         }
     }
 }

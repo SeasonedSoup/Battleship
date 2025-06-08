@@ -8,8 +8,9 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     let gameOverState = false;
 
     const getAttackingPlayer = () => attackingPlayer;
-    const getReceivingPlayer = () => receivingPlayer
-
+    const getReceivingPlayer = () => receivingPlayer;
+    const getGameOverState = () => gameOverState;
+   
     const togglePlayerTurns = () => {
         if(!gameOverState) {
             let tmp = attackingPlayer
@@ -96,6 +97,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     return {
         getAttackingPlayer,
         getReceivingPlayer,
+        getGameOverState,
         togglePlayerTurns,
         roundCounter,
         playRound,

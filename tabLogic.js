@@ -2,6 +2,11 @@ import { ScreenController, setUpFlowController } from "./screencontroller.js";
 
 export function loadGameIntro() {
     const body = document.querySelector('body');
+    body.textContent = ''
+
+    const header = document.createElement('header')
+    header.classList.add('gameTitle')
+    header.textContent = 'Battle Ship!'
 
     const content = document.createElement('div');
     content.classList.add('content')
@@ -51,6 +56,7 @@ export function loadGameIntro() {
     quickAppend(credits);
 
     content.appendChild(buttons);
+    body.appendChild(header);
     body.appendChild(content);
 }
 
@@ -108,6 +114,13 @@ function loadBattle() {
     const shipToggleBtn = document.createElement('button');
     addClass(shipToggleBtn, 'shipToggle', 'none');
     shipToggleBtn.textContent = 'Randomize Ships';
+
+    const goBackToIntroBtn = document.createElement('button');
+    addClass(goBackToIntroBtn, 'goBack', 'none');
+    goBackToIntroBtn.textContent = ' < Main Menu';
+    goBackToIntroBtn.addEventListener('click', () => {
+        loadGameIntro();
+    })
     
 
     const startBtn = document.createElement('button');
@@ -116,10 +129,11 @@ function loadBattle() {
     startBtn.addEventListener('click', () => {
         startBtn.classList.add('none')
     })
-
+    resultWinner.appendChild(goBackToIntroBtn);
     resultWinner.appendChild(shipReadyButton);
     resultWinner.appendChild(shipToggleBtn);
     resultWinner.appendChild(startBtn);
+    
 
     // append main content and resultWinner to body
     body.appendChild(aiGameplay);
@@ -156,7 +170,13 @@ function loadPlayerSetUp(player) {
 
     const passButton = document.createElement('button');
     addClass(passButton, 'ready');
-    passButton.addEventListener('click', intermission);
+    passButton.addEventListener('click', () => {
+        if (player === 'firstPlayer') {
+            intermission('secondPlayer');
+        } else if (player === 'secondPlayer') {
+            intermission('firstPlayer')
+        }
+    });
     passButton.textContent = 'Pass To Next Player'
     
     subHeader.appendChild(playerNameDiv);
@@ -172,7 +192,7 @@ function loadPlayerSetUp(player) {
 
 function intermission(player) {
     const addClass = ((element, ...className) => element.classList.add(...className));
-
+    console.log(player);
     const body = document.querySelector('body');
     body.textContent = '';
 
