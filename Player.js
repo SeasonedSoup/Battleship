@@ -81,8 +81,8 @@ export class Player {
     getHiddenBoard() {
         return this.gameboard.board.map(row => {
             return row.map(col => {
-                if (col.state === 'UD' || col.state === 'UD') {
-                    return {state: 'UD'}
+                if (col.state === 'UD' || col.state === 'S') {
+                    return {state: 'hidden'}
                 } return {state: col.state}
             })
         })

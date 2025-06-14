@@ -8,9 +8,14 @@ function GameInstanceFunc() {
     } 
     const newGameInstance = () => game = GameController();
 
+    const vsGameInstance = (plr1, plr2) => {
+        game = GameController(plr1, plr2);
+    }
+    
     return {
         getGameInstance,
         newGameInstance,
+        vsGameInstance
     }
 }
 
@@ -22,24 +27,37 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
     if (currPlayer === 'firstPlayer') {
         const firstBoardDiv = document.querySelector('.gameBoard');
         const randomSetUpButton = document.querySelector('.randomizeShips');
-        const passButton = document.querySelector('.ready');
 
-        const player = game.playerOne
+        const player1 = game.playerOne
         //eventListeners
         randomSetUpButton.addEventListener('click', () => {
             firstBoardDiv.textContent = '';
-            game.randomizePlayerShips(player);
-            renderBoard(player.getPlayerBoard(), firstBoardDiv);
+            game.randomizePlayerShips(player1);
+            renderBoard(player1.getPlayerBoard(), firstBoardDiv);
         })
       
-        renderBoard(player.getPlayerBoard(), firstBoardDiv);
-    } 
+        renderBoard(player1.getPlayerBoard(), firstBoardDiv);
+    } if (currPlayer === 'secondPlayer') {
+        const secondBoardDiv = document.querySelector('.gameBoard');
+        const randomSetUpButton = document.querySelector('.randomizeShips');
+
+        const player2 = game.playerTwo
+
+        randomSetUpButton.addEventListener('click', () => {
+            secondBoardDiv.textContent = '';
+            game.randomizePlayerShips(player2);
+            renderBoard(player2.getPlayerBoard(), secondBoardDiv);
+        })
+
+        renderBoard(player2.getPlayerBoard(), secondBoardDiv);
+    }
 }
 
 //starting battle responsibility
-export function ScreenController() {
+export function ScreenController(vs = false) {
     let game;
     let gamephase = 'setup';
+
 
     const firstBoardDiv = document.querySelector('.gameBoard1');
     const secondBoardDiv = document.querySelector('.gameBoard2');
@@ -52,23 +70,28 @@ export function ScreenController() {
 
     startButton.addEventListener('click', () => {
          //just for vs computer
-         game = gameFunc.getGameInstance();
+         if (!vs) {
+            game = gameFunc.getGameInstance();
         
-        shipToggle.addEventListener('click', () => {
+            shipToggle.addEventListener('click', () => {
             game.randomizeShipsBoth();
             updateDOM();
-        })
-        secondBoardDiv.addEventListener('click', clickHandlerCells)
-        updateDOM();
+            })
+            
+            secondBoardDiv.addEventListener('click', clickHandlerCells)
+            updateDOM();
 
-        //displays the gameplay
-        shipToggle.classList.remove('none');
-        prepareButton.classList.remove('none');
-        prepareButton.addEventListener('click', () => {
-            gamephase = 'battle';
-            shipToggle.classList.add('none');
-            prepareButton.classList.add('none');
-        })
+            //displays the gameplay
+            shipToggle.classList.remove('none');
+            prepareButton.classList.remove('none');
+            prepareButton.addEventListener('click', () => {
+                gamephase = 'battle';
+                shipToggle.classList.add('none');
+                prepareButton.classList.add('none');
+            })
+         } else { //vs is true
+            game = gameFunc.vsGameInstance()
+         }
     })
     //mixed dynamic
     const updateDOM = () => {

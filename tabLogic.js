@@ -1,4 +1,8 @@
 import { ScreenController, setUpFlowController } from "./screencontroller.js";
+import { storageFunc } from "./playerDataStore.js";
+
+const playerStorage = storageFunc();
+
 
 export function loadGameIntro() {
     const body = document.querySelector('body');
@@ -27,21 +31,34 @@ export function loadGameIntro() {
     const credits = document.createElement('button');
     credits.textContent = 'Credits';
     credits.classList.add('credits');
+
+    const creditFooter = document.createElement('footer');
+
+    const link = document.createElement('a');
+    link.href = 'https://github.com/SeasonedSoup'; 
+    link.textContent = 'Made By @SeasonedSoup';
+
+    link.rel = 'noopener noreferrer';
+
+    
+    const removeReference = () => {
+        requestAnimationFrame(() => {
+            creditFooter.classList.remove('active');
+        })
+        credits.removeEventListener('click', removeReference);
+        credits.addEventListener('click', addReference);
+        document.removeChild('.reference');
+    }
     const addReference = () => {
-        const creditFooter = document.createElement('footer');
         creditFooter.classList.add('reference')
-
-        const link = document.createElement('a');
-        link.href = 'https://github.com/SeasonedSoup'; 
-        link.textContent = 'Made By @SeasonedSoups';
-
-        link.rel = 'noopener noreferrer'; // asked ai said this important for security 
+ // asked ai said this important for security 
 
         requestAnimationFrame(() => {
             creditFooter.classList.add('active');
         });
 
         credits.removeEventListener('click', addReference)
+        credits.addEventListener('click', removeReference)
         creditFooter.appendChild(link);
         body.appendChild(creditFooter);
     }
@@ -60,7 +77,7 @@ export function loadGameIntro() {
     body.appendChild(content);
 }
 
-function loadBattle() {
+function loadBattle(player = null ) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -140,6 +157,10 @@ function loadBattle() {
     body.appendChild(resultWinner);
     
     //call logic
+    if (player !== null) {
+        ScreenController(true) //means its pvp
+        return;
+    }
     ScreenController();
 }   
 
@@ -158,7 +179,7 @@ function loadPlayerSetUp(player) {
     const subHeader = document.createElement('div');
     addClass(subHeader, 'subHeader');
 
-    const playerNameDiv = document.createElement('div');
+    const playerNameDiv = document.createElement('input');
     addClass(playerNameDiv, 'playerName', 'player');
 
     const playerBoard = document.createElement('div');
@@ -172,9 +193,10 @@ function loadPlayerSetUp(player) {
     addClass(passButton, 'ready');
     passButton.addEventListener('click', () => {
         if (player === 'firstPlayer') {
-            intermission('secondPlayer');
+
+            intermission('secondPlayer', playerNameDiv.value);
         } else if (player === 'secondPlayer') {
-            intermission('firstPlayer')
+            intermission('firstPlayerDone', playerNameDiv.value)
         }
     });
     passButton.textContent = 'Pass To Next Player'
@@ -206,7 +228,11 @@ function intermission(player) {
     const readyButton = document.createElement('button')
     addClass(readyButton, 'readyButton');
     readyButton.textContent = 'Ready';
-    readyButton.addEventListener('click', () => loadPlayerSetUp(player))
+    if (player !== 'firstPlayerDone') {
+        readyButton.addEventListener('click', () => loadPlayerSetUp(player))
+    } else {
+        readyButton.addEventListener('click', () => loadBattle(player))
+    }
 
     modalDiv.appendChild(informPass);
     modalDiv.appendChild(readyButton);
