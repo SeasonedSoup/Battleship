@@ -5,18 +5,16 @@ export function storageFunc() {
     let player1 = null;
     let player2 = null;
 
-    const storePlayer = (player, playerName) => {
+    const storePlayer = (player, playerName, board) => {
         if (player === 'firstPlayer') {
-            player1 = new Player(true, playerName)
-            console.log(player1)
-            console.log('has been added')
+            player1 = new Player(true, playerName, board, true)
         } else {
-            player2 = new Player(true, playerName)
+            player2 = new Player(true, playerName, board, true)
         }
     }
 
     const getPlayer = (player) => {
-        if (player = 'firstPlayer'){
+        if (player = 'firstPlayer') {
             return player1
         } else {
             return player2

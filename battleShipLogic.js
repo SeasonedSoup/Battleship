@@ -4,8 +4,12 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     //variables
     let attackingPlayer = playerOne;
     let receivingPlayer = playerTwo;
-  
     let gameOverState = false;
+
+    const setVsPlayers = (newPlayerOne, newPlayerTwo) => {
+        attackingPlayer =  newPlayerOne
+        receivingPlayer = newPlayerTwo      
+    }
 
     const getAttackingPlayer = () => attackingPlayer;
     const getReceivingPlayer = () => receivingPlayer;
@@ -95,6 +99,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
     }
 
     return {
+        setVsPlayers,
         getAttackingPlayer,
         getReceivingPlayer,
         getGameOverState,
@@ -104,8 +109,6 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         getWinner,
         randomizeShipsBoth,
         randomizePlayerShips,
-        playerOne,
-        playerTwo
     }
 }
 

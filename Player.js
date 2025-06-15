@@ -1,11 +1,14 @@
 import {GameBoard} from "./Gameboard.js"
 
 export class Player {
-    constructor(player = true, name) {
+    constructor(player = true, name, gameboard = new GameBoard(), placed = false) {
         this.player = player;
-        this.gameboard = new GameBoard();
+        this.gameboard = gameboard
         this.name = name;
-        this.placeMultipleRandomShips();
+        this.placed = placed
+        if(!this.placed) {
+            this.placeMultipleRandomShips();
+        }
         //for ai smart
         this.lasthit = null
     }
@@ -25,7 +28,7 @@ export class Player {
         }
     }
     
-    makeMove(coords, opponentBoard = new GameBoard())  {
+    makeMove(coords, opponentBoard)  {
         return opponentBoard.receiveAttack(coords);
     }
 
@@ -78,6 +81,7 @@ export class Player {
         return directions.filter(([dx, dy]) => dx >= 0 && dx < 10 && dy >= 0 && dy < 10 && !opponentBoard.isAlreadyAttacked([dx, dy]) )
     }
 
+
     getHiddenBoard() {
         return this.gameboard.board.map(row => {
             return row.map(col => {
@@ -92,6 +96,10 @@ export class Player {
     }
     resetPlayerBoard() {
         this.gameboard.loadBoard();
+    }
+
+    getGameBoard() {
+        return this.gameboard
     }
 
 

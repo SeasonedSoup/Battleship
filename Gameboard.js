@@ -22,7 +22,6 @@ export class GameBoard {
         }
         this.ships = [];
     }
-    
     getBoard() {
         return this.board;
     }

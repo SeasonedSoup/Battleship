@@ -3,24 +3,21 @@ import { playerStorage } from "./tabLogic.js";
 //get the gamecontroller separately
 function GameInstanceFunc() {
     let game = GameController(); 
-    console.log('this should load only once')
     const getGameInstance = () => {
         return game;
     } 
     const newGameInstance = () => game = GameController();
-
-    const vsGameInstance = (plr1, plr2) => {
-        game = GameController(plr1, plr2);
-    }
     
+    const convertToVsGameInstance = (player1, player2) => game = GameController(player1, player2)
+
     return {
         getGameInstance,
         newGameInstance,
-        vsGameInstance
+        convertToVsGameInstance
     }
 }
 
-let gameFunc = GameInstanceFunc();
+export const gameFunc = GameInstanceFunc();
 
 export function setUpFlowController(currPlayer = 'firstPlayer') {
     let game = gameFunc.getGameInstance();
@@ -29,7 +26,7 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
         const firstBoardDiv = document.querySelector('.gameBoard');
         const randomSetUpButton = document.querySelector('.randomizeShips');
 
-        const player1 = game.playerOne
+        const player1 = game.getAttackingPlayer()
         //eventListeners
         randomSetUpButton.addEventListener('click', () => {
             firstBoardDiv.textContent = '';
@@ -42,7 +39,7 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
         const secondBoardDiv = document.querySelector('.gameBoard');
         const randomSetUpButton = document.querySelector('.randomizeShips');
 
-        const player2 = game.playerTwo
+        const player2 = game.getReceivingPlayer()
 
         randomSetUpButton.addEventListener('click', () => {
             secondBoardDiv.textContent = '';
@@ -54,11 +51,10 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
     }
 }
 
-//starting battle responsibility
+//starting battle responsibility //defaulted to computer battle
 export function ScreenController(vs = false) {
     let game;
     let gamephase = 'setup';
-
 
     const firstBoardDiv = document.querySelector('.gameBoard1');
     const secondBoardDiv = document.querySelector('.gameBoard2');
@@ -68,12 +64,12 @@ export function ScreenController(vs = false) {
     const shipToggle = document.querySelector('.shipToggle');
     const startButton = document.querySelector('.start');
     const prepareButton = document.querySelector('.ready');
+    const passButton = document.querySelector('.pass')
 
     startButton.addEventListener('click', () => {
+        game = gameFunc.getGameInstance();
          //just for vs computer
-         if (!vs) {
-            game = gameFunc.getGameInstance();
-        
+         if (!vs) {        
             shipToggle.addEventListener('click', () => {
             game.randomizeShipsBoth();
             updateDOM();
@@ -82,7 +78,7 @@ export function ScreenController(vs = false) {
             secondBoardDiv.addEventListener('click', clickHandlerCells)
             updateDOM();
 
-            //displays the gameplay
+            //displays the buttons
             shipToggle.classList.remove('none');
             prepareButton.classList.remove('none');
             prepareButton.addEventListener('click', () => {
@@ -92,21 +88,30 @@ export function ScreenController(vs = false) {
             })
          } else if (vs) { //vs is true
             const [player1, player2] = playerStorage.getBothPlayers()
-            console.log(`${player1.name} vs ${player2.name}`);
-            game = gameFunc.vsGameInstance(player1, player2);
+            console.log(player1)
+            gameFunc.convertToVsGameInstance(player1, player2);
+            // a new game instance basicallgy lazy we pretend the initial is real and second is ai but we slowly convert to the actual players
+            game = gameFunc.getGameInstance();
+            //displays the buttons
+            passButton.classList.remove('none');
+            updateDOM();
          }
     })
     //mixed dynamic
     const updateDOM = () => {
-        const firstPlayer =  game.playerOne;
-        const secondPlayer = game.playerTwo;
-        playerOneDiv.textContent = firstPlayer.name;
-        playerTwoDiv.textContent = secondPlayer.name;
-        [[firstPlayer.gameboard.getBoard(), firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
+        const attackingPlayer =  game.getAttackingPlayer();
+        const defendingPlayer = game.getReceivingPlayer();
+
+        playerOneDiv.textContent = attackingPlayer.name;
+        playerTwoDiv.textContent = defendingPlayer.name;
+        
+        [[attackingPlayer.getPlayerBoard(), firstBoardDiv], [defendingPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
             ([board, boardDiv]) => {
                 boardDiv.textContent = '';
                 renderBoard(board, boardDiv)
         })
+
+            //now its second players turn to not see the first board
         displayWinner();
     }
     //handles the event for calling the cells get the datacoords using parse with addEventListener

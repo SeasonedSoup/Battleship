@@ -1,4 +1,4 @@
-import { ScreenController, setUpFlowController } from "./screencontroller.js";
+import { ScreenController, setUpFlowController, gameFunc } from "./screencontroller.js";
 import { storageFunc } from "./playerDataStore.js";
 
 export const playerStorage = storageFunc();
@@ -131,6 +131,10 @@ function loadBattle(vs = false) {
     addClass(shipToggleBtn, 'shipToggle', 'none');
     shipToggleBtn.textContent = 'Randomize Ships';
 
+    const passButton = document.createElement('button')
+    addClass(passButton, 'pass', 'none');
+    passButton.textContent = 'Pass';
+
     const goBackToIntroBtn = document.createElement('button');
     addClass(goBackToIntroBtn, 'goBack', 'none');
     goBackToIntroBtn.textContent = ' < Main Menu';
@@ -149,6 +153,7 @@ function loadBattle(vs = false) {
     resultWinner.appendChild(shipReadyButton);
     resultWinner.appendChild(shipToggleBtn);
     resultWinner.appendChild(startBtn);
+    resultWinner.appendChild(passButton);
     
 
     // append main content and resultWinner to body
@@ -193,6 +198,8 @@ function loadPlayerSetUp(player) {
     randomizeShipsButton.textContent = 'Randomize Placements'
     addClass(randomizeShipsButton, 'randomizeShips');
 
+    const game = gameFunc.getGameInstance()
+    
     const passButton = document.createElement('button');
     addClass(passButton, 'ready');
     passButton.addEventListener('click', () => {
@@ -201,10 +208,10 @@ function loadPlayerSetUp(player) {
             return;
         }
         if (player === 'firstPlayer' ) {
-            playerStorage.storePlayer(player, playerNameDiv.value)
+            playerStorage.storePlayer(player, playerNameDiv.value, game.getAttackingPlayer().getGameBoard()); //idea fix just get the board bruh
             intermission('secondPlayer');
         } else if (player === 'secondPlayer') {
-            playerStorage.storePlayer(player, playerNameDiv.value)
+            playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard());
             intermission('firstPlayerDone')
         }
     });
