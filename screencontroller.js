@@ -1,4 +1,5 @@
 import { GameController } from "./battleShipLogic.js";
+import { playerStorage } from "./tabLogic.js";
 //get the gamecontroller separately
 function GameInstanceFunc() {
     let game = GameController(); 
@@ -89,8 +90,10 @@ export function ScreenController(vs = false) {
                 shipToggle.classList.add('none');
                 prepareButton.classList.add('none');
             })
-         } else { //vs is true
-            game = gameFunc.vsGameInstance()
+         } else if (vs) { //vs is true
+            const [player1, player2] = playerStorage.getBothPlayers()
+            console.log(`${player1.name} vs ${player2.name}`);
+            game = gameFunc.vsGameInstance(player1, player2);
          }
     })
     //mixed dynamic

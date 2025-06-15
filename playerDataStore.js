@@ -2,12 +2,14 @@
 import { Player } from "./Player.js";
 
 export function storageFunc() {
-    const player1 = null;
-    const player2 = null;
+    let player1 = null;
+    let player2 = null;
 
     const storePlayer = (player, playerName) => {
         if (player === 'firstPlayer') {
             player1 = new Player(true, playerName)
+            console.log(player1)
+            console.log('has been added')
         } else {
             player2 = new Player(true, playerName)
         }

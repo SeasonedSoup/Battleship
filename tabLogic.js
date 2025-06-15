@@ -1,8 +1,7 @@
 import { ScreenController, setUpFlowController } from "./screencontroller.js";
 import { storageFunc } from "./playerDataStore.js";
 
-const playerStorage = storageFunc();
-
+export const playerStorage = storageFunc();
 
 export function loadGameIntro() {
     const body = document.querySelector('body');
@@ -21,7 +20,7 @@ export function loadGameIntro() {
     const vsAiButton = document.createElement('button');
     vsAiButton.textContent = 'Vs Ai';
     vsAiButton.classList.add('vsAi');
-    vsAiButton.addEventListener('click', loadBattle);
+    vsAiButton.addEventListener('click', () => loadBattle());
 
     const vsPlayerButton = document.createElement('button');
     vsPlayerButton.textContent = 'Vs Player';
@@ -77,7 +76,7 @@ export function loadGameIntro() {
     body.appendChild(content);
 }
 
-function loadBattle(player = null ) {
+function loadBattle(vs = false) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -157,14 +156,15 @@ function loadBattle(player = null ) {
     body.appendChild(resultWinner);
     
     //call logic
-    if (player !== null) {
-        ScreenController(true) //means its pvp
+    if (vs) {
+        ScreenController(vs) //means its pvp
         return;
     }
     ScreenController();
 }   
 
 function loadPlayerSetUp(player) {
+    
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -179,6 +179,10 @@ function loadPlayerSetUp(player) {
     const subHeader = document.createElement('div');
     addClass(subHeader, 'subHeader');
 
+    const playerLabel = document.createElement('label');
+    addClass(playerLabel, 'playerLabel');
+    playerLabel.textContent = 'Player Name Input: '
+
     const playerNameDiv = document.createElement('input');
     addClass(playerNameDiv, 'playerName', 'player');
 
@@ -192,15 +196,20 @@ function loadPlayerSetUp(player) {
     const passButton = document.createElement('button');
     addClass(passButton, 'ready');
     passButton.addEventListener('click', () => {
-        if (player === 'firstPlayer') {
-
-            intermission('secondPlayer', playerNameDiv.value);
+        if (playerNameDiv.value === '') {
+            alert('Enter a valid name')
+            return;
+        }
+        if (player === 'firstPlayer' ) {
+            playerStorage.storePlayer(player, playerNameDiv.value)
+            intermission('secondPlayer');
         } else if (player === 'secondPlayer') {
-            intermission('firstPlayerDone', playerNameDiv.value)
+            playerStorage.storePlayer(player, playerNameDiv.value)
+            intermission('firstPlayerDone')
         }
     });
     passButton.textContent = 'Pass To Next Player'
-    
+    subHeader.appendChild(playerLabel);
     subHeader.appendChild(playerNameDiv);
     subHeader.appendChild(playerBoard);
     boardWrapper.appendChild(subHeader);
@@ -211,6 +220,8 @@ function loadPlayerSetUp(player) {
 
     setUpFlowController(player);
 }
+
+
 
 function intermission(player) {
     const addClass = ((element, ...className) => element.classList.add(...className));
@@ -231,7 +242,7 @@ function intermission(player) {
     if (player !== 'firstPlayerDone') {
         readyButton.addEventListener('click', () => loadPlayerSetUp(player))
     } else {
-        readyButton.addEventListener('click', () => loadBattle(player))
+        readyButton.addEventListener('click', () => loadBattle(true))
     }
 
     modalDiv.appendChild(informPass);
