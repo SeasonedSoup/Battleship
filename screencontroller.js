@@ -50,7 +50,7 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
         renderBoard(player2.getPlayerBoard(), secondBoardDiv);
     }
 }
-
+let toggledReverse = false;
 //starting battle responsibility //defaulted to computer battle
 export function ScreenController(vs = false) {
     let game;
@@ -89,15 +89,42 @@ export function ScreenController(vs = false) {
          } else if (vs) { //vs is true
             const [player1, player2] = playerStorage.getBothPlayers()
             console.log(player1)
+            // a new game instance basicallg lazy instantiation we pretend the initial boards given is real and second is ai but we slowly convert to the actual players
             gameFunc.convertToVsGameInstance(player1, player2);
-            // a new game instance basicallgy lazy we pretend the initial is real and second is ai but we slowly convert to the actual players
             game = gameFunc.getGameInstance();
             //displays the buttons
             passButton.classList.remove('none');
-            updateDOM();
+            passButton.style.opacity = 0.7;
+
+            updatePvp();
          }
     })
-    //mixed dynamic
+
+    const updatePvp = () => {
+        const firstPlayer = game.getFirstPlayer();
+        const secondPlayer = game.getSecondPlayer();
+        console.log(firstPlayer)
+
+        playerOneDiv.textContent = firstPlayer.name;
+        playerTwoDiv.textContent = secondPlayer.name;
+        
+        if (!toggledReverse) {
+            [[firstPlayer.getPlayerBoard(), firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
+                ([board, boardDiv]) => {
+                    boardDiv.textContent = '';
+                    renderBoard(board, boardDiv)
+            })
+        } else {
+            [[firstPlayer.getHiddenBoard(), firstBoardDiv], [secondPlayer.getPlayerBoard(), secondBoardDiv]].forEach(
+                ([board, boardDiv]) => {
+                    boardDiv.textContent = '';
+                    renderBoard(board, boardDiv)
+            })
+        }
+
+        toggledReverse = !toggledReverse
+        displayWinner();
+    }
     const updateDOM = () => {
         const attackingPlayer =  game.getAttackingPlayer();
         const defendingPlayer = game.getReceivingPlayer();

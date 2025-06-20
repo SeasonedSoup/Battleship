@@ -51,6 +51,24 @@ body {
     padding: 20px;
     border-radius: 8px;
     transform: rotate(12deg) translate(350px, -240px);
+    animation: flipToRight 2s ease-out forwards;
+
+}
+
+/* for Buttons */
+
+@keyframes flipToRight {
+    0% {
+        transform: translate(-300%, 20%) rotate(0turn);
+    }
+
+    80% {
+        transform: translate(200px, -150px) rotate(6turn);
+    }
+   
+    100% {
+        transform: rotate(12deg) translate(350px, -240px);;
+    }
 }
 /* intro Buttons */
 .vsAi, .vsPlayer, .credits{
@@ -118,7 +136,6 @@ body {
     background: white;
     padding: 1em;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    
   }
 
 .reference.active {
@@ -171,3 +188,6 @@ body {
 .ship {
     background-color: #67b5f1;
 }
+
+/* pvp stuff */
+

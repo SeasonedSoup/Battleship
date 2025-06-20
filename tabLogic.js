@@ -135,6 +135,10 @@ function loadBattle(vs = false) {
     addClass(passButton, 'pass', 'none');
     passButton.textContent = 'Pass';
 
+    passButton.addEventListener('click', () => {
+        intermission('currentlyInBattle')
+    })
+
     const goBackToIntroBtn = document.createElement('button');
     addClass(goBackToIntroBtn, 'goBack', 'none');
     goBackToIntroBtn.textContent = ' < Main Menu';
@@ -211,7 +215,7 @@ function loadPlayerSetUp(player) {
             playerStorage.storePlayer(player, playerNameDiv.value, game.getAttackingPlayer().getGameBoard()); //idea fix just get the board bruh
             intermission('secondPlayer');
         } else if (player === 'secondPlayer') {
-            playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard());
+            playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard(``));
             intermission('firstPlayerDone')
         }
     });
@@ -246,9 +250,12 @@ function intermission(player) {
     const readyButton = document.createElement('button')
     addClass(readyButton, 'readyButton');
     readyButton.textContent = 'Ready';
-    if (player !== 'firstPlayerDone') {
+
+    if (player !== 'firstPlayerDone' && player !== 'currentlyInBattle') {
         readyButton.addEventListener('click', () => loadPlayerSetUp(player))
-    } else {
+    } else if (player === 'firstPlayerDone') {
+        readyButton.addEventListener('click', () => loadBattle(true))
+    } else if (player === 'currentlyInBattle') {
         readyButton.addEventListener('click', () => loadBattle(true))
     }
 
@@ -256,4 +263,8 @@ function intermission(player) {
     modalDiv.appendChild(readyButton);
 
     body.appendChild(modalDiv);
+}
+
+function intermissionBattle() {
+    
 }

@@ -2,8 +2,12 @@ import {Player} from "./Player.js"
 
 export function GameController(playerOne = new Player(true , "Real"), playerTwo = new Player(false, "Computer")) {
     //variables
+    let firstPlayer = playerOne;
+    let secondPlayer = playerTwo;
+
     let attackingPlayer = playerOne;
     let receivingPlayer = playerTwo;
+
     let gameOverState = false;
 
     const setVsPlayers = (newPlayerOne, newPlayerTwo) => {
@@ -11,8 +15,12 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         receivingPlayer = newPlayerTwo      
     }
 
+    const getFirstPlayer = () => firstPlayer 
+    const getSecondPlayer = () => secondPlayer
+
     const getAttackingPlayer = () => attackingPlayer;
     const getReceivingPlayer = () => receivingPlayer;
+
     const getGameOverState = () => gameOverState;
    
     const togglePlayerTurns = () => {
@@ -100,6 +108,8 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
 
     return {
         setVsPlayers,
+        getFirstPlayer,
+        getSecondPlayer,
         getAttackingPlayer,
         getReceivingPlayer,
         getGameOverState,
