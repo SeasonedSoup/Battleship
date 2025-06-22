@@ -76,7 +76,7 @@ export function loadGameIntro() {
     body.appendChild(content);
 }
 
-function loadBattle(vs = false) {
+function loadBattle(vs = false, boardReceiver = null) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -166,7 +166,7 @@ function loadBattle(vs = false) {
     
     //call logic
     if (vs) {
-        ScreenController(vs) //means its pvp
+        ScreenController(vs, boardReceiver) //means its pvp
         return;
     }
     ScreenController();
@@ -215,7 +215,7 @@ function loadPlayerSetUp(player) {
             playerStorage.storePlayer(player, playerNameDiv.value, game.getAttackingPlayer().getGameBoard()); //idea fix just get the board bruh
             intermission('secondPlayer');
         } else if (player === 'secondPlayer') {
-            playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard(``));
+            playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard());
             intermission('firstPlayerDone')
         }
     });
@@ -232,8 +232,8 @@ function loadPlayerSetUp(player) {
     setUpFlowController(player);
 }
 
-
-
+//asks if the first player is receiving
+let isFirstPlayer = false
 function intermission(player) {
     const addClass = ((element, ...className) => element.classList.add(...className));
     console.log(player);
@@ -250,13 +250,20 @@ function intermission(player) {
     const readyButton = document.createElement('button')
     addClass(readyButton, 'readyButton');
     readyButton.textContent = 'Ready';
-
+    //bad if loop lol
     if (player !== 'firstPlayerDone' && player !== 'currentlyInBattle') {
         readyButton.addEventListener('click', () => loadPlayerSetUp(player))
     } else if (player === 'firstPlayerDone') {
-        readyButton.addEventListener('click', () => loadBattle(true))
-    } else if (player === 'currentlyInBattle') {
-        readyButton.addEventListener('click', () => loadBattle(true))
+        readyButton.addEventListener('click', () => loadBattle(true, 'secondPlayer'))
+        isFirstPlayer = !isFirstPlayer
+    } else if (player === 'currentlyInBattle' ) {
+        if (isFirstPlayer) {
+            readyButton.addEventListener('click', () => loadBattle(true, 'firstPlayer',))
+            isFirstPlayer = !isFirstPlayer
+        } else if (!isFirstPlayer) {
+            readyButton.addEventListener('click', () => loadBattle(true, 'secondPlayer'))
+            isFirstPlayer = !isFirstPlayer
+        }
     }
 
     modalDiv.appendChild(informPass);

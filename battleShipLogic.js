@@ -65,9 +65,11 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
         }
 
         const enemyBoard = receivingPlayer.gameboard
+        console.log("hi",receivingPlayer)
         const attacker = getAttackingPlayer();
        
         const resultHit = attacker.makeMove(coords, enemyBoard);
+        //result is not valid hit from ai
         if (resultHit === undefined) return;
         
         if (!resultHit) {
@@ -80,6 +82,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
                 gameOverState = true;               
             }
         }
+        return resultHit;
     }
 
     const getWinner = () => {

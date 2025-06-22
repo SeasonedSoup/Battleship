@@ -50,9 +50,11 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
         renderBoard(player2.getPlayerBoard(), secondBoardDiv);
     }
 }
+//for pvp
 let toggledReverse = false;
 //starting battle responsibility //defaulted to computer battle
-export function ScreenController(vs = false) {
+//board receiver is the player currrently receiving the attack //converted means in gamefunc it has already been converted to a game instance so we just fetch it instead
+export function ScreenController(vs = false, boardReceiver = null) {
     let game;
     let gamephase = 'setup';
 
@@ -90,20 +92,51 @@ export function ScreenController(vs = false) {
             const [player1, player2] = playerStorage.getBothPlayers()
             console.log(player1)
             // a new game instance basicallg lazy instantiation we pretend the initial boards given is real and second is ai but we slowly convert to the actual players
+            
             gameFunc.convertToVsGameInstance(player1, player2);
+            
             game = gameFunc.getGameInstance();
             //displays the buttons
             passButton.classList.remove('none');
             passButton.style.opacity = 0.7;
+            let hasPlayed = false
+            if (boardReceiver === 'secondPlayer') {
+                secondBoardDiv.addEventListener('click', (e) => {
+                console.log('secondPlayer is the receiver')
+                    if (hasPlayed) {
+                        console.log("you have already made your move")
+                        return;
+                    }
+
+                    const success = clickHandlerCells(e, true);
+                    if (success !== true) {
+                        hasPlayed = true
+                    }
+                 
+                })
+            } else if (boardReceiver === 'firstPlayer') {
+                console.log("firstPlayer is the receiver")
+                firstBoardDiv.addEventListener('click', (e) => {
+                    if (hasPlayed) {
+                        console.log("you have already made your move")
+                        return;
+                    }
+                    const success = clickHandlerCells(e, true);
+                    if (success !== true) {
+                        hasPlayed = true
+                    }
+                })
+            }
+           
 
             updatePvp();
          }
     })
-
-    const updatePvp = () => {
+    //let the attacking player atleast see the result before passing
+    const updatePvp = (seeResultBeforePass = true) => {
         const firstPlayer = game.getFirstPlayer();
         const secondPlayer = game.getSecondPlayer();
-        console.log(firstPlayer)
+        gamephase = 'battle'
 
         playerOneDiv.textContent = firstPlayer.name;
         playerTwoDiv.textContent = secondPlayer.name;
@@ -121,8 +154,10 @@ export function ScreenController(vs = false) {
                     renderBoard(board, boardDiv)
             })
         }
+        if(!seeResultBeforePass) {
+            toggledReverse = !toggledReverse
+        }
 
-        toggledReverse = !toggledReverse
         displayWinner();
     }
     const updateDOM = () => {
@@ -142,15 +177,23 @@ export function ScreenController(vs = false) {
         displayWinner();
     }
     //handles the event for calling the cells get the datacoords using parse with addEventListener
-    function clickHandlerCells(e) {
-
+    function clickHandlerCells(e, pvp) {
+        console.log('clicked')
         const target = e.target
         if(!target.classList.contains('cell') || gamephase === 'setup' || game.getGameOverState()) {
+            console.log("Either over or gamephase is not ready")
             return;
         }
 
         const coords = JSON.parse(target.dataset.coords)
-        game.playRound(coords)
+        const result = game.playRound(coords)
+        
+        if (pvp) {
+            updatePvp(false);
+            if (result !== null && result === true) {
+                return true;
+            }
+        }
         updateDOM();
     }
     
