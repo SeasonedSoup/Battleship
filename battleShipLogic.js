@@ -57,7 +57,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
             playRoundAi();
         }
     }
-                            //check if playerTwo is an Ai
+                            
     const playRound = (coords) => {
         if (gameOverState) {
             console.log('The Game Has Ended')

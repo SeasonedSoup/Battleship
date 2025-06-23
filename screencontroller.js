@@ -110,27 +110,33 @@ export function ScreenController(vs = false, boardReceiver = null, converted = f
                         console.log("you have already made your move")
                         return;
                     }
-
+                  
                     const success = clickHandlerCells(e, true);
-                    if (success !== true) {
+                   
+                    console.log("Thisis success", success)
+                    if (success !== true && success !== undefined) {
                         hasPlayed = true
                         updatePvp(false)
+                    } else {
+                        updatePvp()
                     }
                 })
             } else if (boardReceiver === 'firstPlayer') {
                 firstBoardDiv.addEventListener('click', (e) => {
                     console.log("firstPlayer is the receiver")
+
                     if (hasPlayed) {
                         console.log("you have already made your move")
                         return;
                     }
 
                     const success = clickHandlerCells(e, true);
-                    if (success !== true) {
+                    console.log("Thisis success", success)
+                    if (success !== true && success !== undefined) {
                         hasPlayed = true
                         updatePvp(false)
                     } else {
-                        updatePvp
+                        updatePvp()
                     }
                 })
             }
@@ -189,7 +195,8 @@ export function ScreenController(vs = false, boardReceiver = null, converted = f
     //handles the event for calling the cells get the datacoords using parse with addEventListener
     function clickHandlerCells(e, pvp = false) {
         const target = e.target
-        if(!target.classList.contains('cell') || gamephase === 'setup' || game.getGameOverState()) {
+    
+        if (!target.classList.contains('cell') || gamephase === 'setup' || game.getGameOverState()) {
             console.log("Either over or gamephase is not ready")
             return;
         }
@@ -200,9 +207,13 @@ export function ScreenController(vs = false, boardReceiver = null, converted = f
         
         if (pvp) {
             console.log("Updating dom but not switching")
+            
             if (result !== null && result === true) {
-                return true;
-            }
+                return true; 
+            } else if (result == null) { //loose check 
+                return undefined;
+            } 
+            return false;
         }
         updateDOM();
     }
