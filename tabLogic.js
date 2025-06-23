@@ -75,8 +75,8 @@ export function loadGameIntro() {
     body.appendChild(header);
     body.appendChild(content);
 }
-
-function loadBattle(vs = false, boardReceiver = null) {
+//converted means it hasnt yet been converted to a vsgame instance
+function loadBattle(vs = false, boardReceiver = null, converted = false) {
     const addClass = ((element, ...className) => element.classList.add(...className));
 
     const body = document.querySelector('body');
@@ -166,7 +166,7 @@ function loadBattle(vs = false, boardReceiver = null) {
     
     //call logic
     if (vs) {
-        ScreenController(vs, boardReceiver) //means its pvp
+        ScreenController(vs, boardReceiver, converted) //means its pvp
         return;
     }
     ScreenController();
@@ -212,7 +212,7 @@ function loadPlayerSetUp(player) {
             return;
         }
         if (player === 'firstPlayer' ) {
-            playerStorage.storePlayer(player, playerNameDiv.value, game.getAttackingPlayer().getGameBoard()); //idea fix just get the board bruh
+            playerStorage.storePlayer(player, playerNameDiv.value, game.getAttackingPlayer().getGameBoard()); 
             intermission('secondPlayer');
         } else if (player === 'secondPlayer') {
             playerStorage.storePlayer(player, playerNameDiv.value, game.getReceivingPlayer().getGameBoard());
@@ -250,7 +250,7 @@ function intermission(player) {
     const readyButton = document.createElement('button')
     addClass(readyButton, 'readyButton');
     readyButton.textContent = 'Ready';
-    //bad if loop lol
+    //bad if statements lol
     if (player !== 'firstPlayerDone' && player !== 'currentlyInBattle') {
         readyButton.addEventListener('click', () => loadPlayerSetUp(player))
     } else if (player === 'firstPlayerDone') {
@@ -258,10 +258,10 @@ function intermission(player) {
         isFirstPlayer = !isFirstPlayer
     } else if (player === 'currentlyInBattle' ) {
         if (isFirstPlayer) {
-            readyButton.addEventListener('click', () => loadBattle(true, 'firstPlayer',))
+            readyButton.addEventListener('click', () => loadBattle(true, 'firstPlayer', true))
             isFirstPlayer = !isFirstPlayer
         } else if (!isFirstPlayer) {
-            readyButton.addEventListener('click', () => loadBattle(true, 'secondPlayer'))
+            readyButton.addEventListener('click', () => loadBattle(true, 'secondPlayer', true))
             isFirstPlayer = !isFirstPlayer
         }
     }
@@ -270,8 +270,4 @@ function intermission(player) {
     modalDiv.appendChild(readyButton);
 
     body.appendChild(modalDiv);
-}
-
-function intermissionBattle() {
-    
 }

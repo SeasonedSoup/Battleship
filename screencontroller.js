@@ -54,7 +54,8 @@ export function setUpFlowController(currPlayer = 'firstPlayer') {
 let toggledReverse = false;
 //starting battle responsibility //defaulted to computer battle
 //board receiver is the player currrently receiving the attack //converted means in gamefunc it has already been converted to a game instance so we just fetch it instead
-export function ScreenController(vs = false, boardReceiver = null) {
+//
+export function ScreenController(vs = false, boardReceiver = null, converted = false) {
     let game;
     let gamephase = 'setup';
 
@@ -89,17 +90,19 @@ export function ScreenController(vs = false, boardReceiver = null) {
                 prepareButton.classList.add('none');
             })
          } else if (vs) { //vs is true
-            const [player1, player2] = playerStorage.getBothPlayers()
-            console.log(player1)
-            // a new game instance basicallg lazy instantiation we pretend the initial boards given is real and second is ai but we slowly convert to the actual players
-            
-            gameFunc.convertToVsGameInstance(player1, player2);
+             // a new game instance basicallg lazy instantiation we pretend the initial boards given is real and second is ai but we slowly convert to the actual players
+            if (!converted) {
+                const [player1, player2] = playerStorage.getBothPlayers()
+                console.log(player1)
+                gameFunc.convertToVsGameInstance(player1, player2);
+            }
             
             game = gameFunc.getGameInstance();
             //displays the buttons
             passButton.classList.remove('none');
             passButton.style.opacity = 0.7;
             let hasPlayed = false
+            
             if (boardReceiver === 'secondPlayer') {
                 secondBoardDiv.addEventListener('click', (e) => {
                 console.log('secondPlayer is the receiver')
@@ -111,24 +114,26 @@ export function ScreenController(vs = false, boardReceiver = null) {
                     const success = clickHandlerCells(e, true);
                     if (success !== true) {
                         hasPlayed = true
+                        updatePvp(false)
                     }
-                 
                 })
             } else if (boardReceiver === 'firstPlayer') {
-                console.log("firstPlayer is the receiver")
                 firstBoardDiv.addEventListener('click', (e) => {
+                    console.log("firstPlayer is the receiver")
                     if (hasPlayed) {
                         console.log("you have already made your move")
                         return;
                     }
+
                     const success = clickHandlerCells(e, true);
                     if (success !== true) {
                         hasPlayed = true
+                        updatePvp(false)
+                    } else {
+                        updatePvp
                     }
                 })
             }
-           
-
             updatePvp();
          }
     })
@@ -142,12 +147,15 @@ export function ScreenController(vs = false, boardReceiver = null) {
         playerTwoDiv.textContent = secondPlayer.name;
         
         if (!toggledReverse) {
+            console.log("Toggled Reverse is false meaning were at first players pov");
+
             [[firstPlayer.getPlayerBoard(), firstBoardDiv], [secondPlayer.getHiddenBoard(), secondBoardDiv]].forEach(
                 ([board, boardDiv]) => {
                     boardDiv.textContent = '';
                     renderBoard(board, boardDiv)
             })
         } else {
+            console.log("Toggle Reverse is true meaning were at second players pov");
             [[firstPlayer.getHiddenBoard(), firstBoardDiv], [secondPlayer.getPlayerBoard(), secondBoardDiv]].forEach(
                 ([board, boardDiv]) => {
                     boardDiv.textContent = '';
@@ -160,6 +168,7 @@ export function ScreenController(vs = false, boardReceiver = null) {
 
         displayWinner();
     }
+
     const updateDOM = () => {
         const attackingPlayer =  game.getAttackingPlayer();
         const defendingPlayer = game.getReceivingPlayer();
@@ -176,9 +185,9 @@ export function ScreenController(vs = false, boardReceiver = null) {
             //now its second players turn to not see the first board
         displayWinner();
     }
+
     //handles the event for calling the cells get the datacoords using parse with addEventListener
-    function clickHandlerCells(e, pvp) {
-        console.log('clicked')
+    function clickHandlerCells(e, pvp = false) {
         const target = e.target
         if(!target.classList.contains('cell') || gamephase === 'setup' || game.getGameOverState()) {
             console.log("Either over or gamephase is not ready")
@@ -187,9 +196,10 @@ export function ScreenController(vs = false, boardReceiver = null) {
 
         const coords = JSON.parse(target.dataset.coords)
         const result = game.playRound(coords)
+        console.log(result);
         
         if (pvp) {
-            updatePvp(false);
+            console.log("Updating dom but not switching")
             if (result !== null && result === true) {
                 return true;
             }

@@ -64,8 +64,7 @@ export function GameController(playerOne = new Player(true , "Real"), playerTwo 
             return;
         }
 
-        const enemyBoard = receivingPlayer.gameboard
-        console.log("hi",receivingPlayer)
+        const enemyBoard = getReceivingPlayer().gameboard
         const attacker = getAttackingPlayer();
        
         const resultHit = attacker.makeMove(coords, enemyBoard);
